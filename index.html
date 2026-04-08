@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prodej balíčků — Diamond Plus</title>
+<title>Akční balíčky — Diamond Plus</title>
 <style>
 :root {
   --brand: #5C2450;
@@ -292,6 +292,16 @@ body {
 .rank-num.gold { background: var(--accent); color: #fff; }
 /* NO DATA */
 .no-data { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
+/* INFO NOTE */
+.info-note {
+  background: rgba(230,168,23,0.08);
+  border: 1px solid rgba(230,168,23,0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
 /* RESPONSIVE */
 @media (max-width: 900px) {
   .sidebar { transform: translateX(-100%); }
@@ -337,11 +347,12 @@ body {
 
 <!-- MAIN CONTENT -->
 <main class="main">
+
   <div class="header">
     <div class="header-row">
       <div>
-        <h1>🎁 Prodej balíčků — Diamond Plus</h1>
-        <div class="period">Rok 2026 · data z e-shopu kralovstvi-tiande.cz</div>
+        <h1>🎁 Akční balíčky — přehled katalogu</h1>
+        <div class="period">Sekce „Akční balíčky" · e-shop kralovstvi-tiande.cz · 51 produktů</div>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()">
         <span id="theme-icon">☀️</span> Světlý režim
@@ -353,66 +364,69 @@ body {
   <div class="kpi-grid">
     <div class="kpi-card purple">
       <div class="kpi-icon">📦</div>
-      <div class="kpi-label">Celkem balíčků prodáno</div>
-      <div class="kpi-value" id="kpi-total-qty">1 177 ks</div>
-      <div class="kpi-sub">ze všech aktivních objednávek 2026</div>
-    </div>
-    <div class="kpi-card gold">
-      <div class="kpi-icon">💸</div>
-      <div class="kpi-label">Celková tržba z balíčků</div>
-      <div class="kpi-value" id="kpi-total-rev">142 839 Kč</div>
-      <div class="kpi-sub">součet položek z objednávek</div>
+      <div class="kpi-label">Celkem balíčků v katalogu</div>
+      <div class="kpi-value" id="kpi-total">51</div>
+      <div class="kpi-sub">sekce „Akční balíčky" (sekce 500)</div>
     </div>
     <div class="kpi-card green">
-      <div class="kpi-icon">📊</div>
-      <div class="kpi-label">% z celkových tržeb</div>
-      <div class="kpi-value" id="kpi-pct">0,28 %</div>
-      <div class="kpi-sub">celk. tržby 2026: 50 596 666 Kč</div>
+      <div class="kpi-icon">✅</div>
+      <div class="kpi-label">Aktivní (viditelné)</div>
+      <div class="kpi-value" id="kpi-visible">—</div>
+      <div class="kpi-sub">zobrazeno zákazníkům</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-icon">🏪</div>
+      <div class="kpi-label">Skladem (celkem ks)</div>
+      <div class="kpi-value" id="kpi-stock">—</div>
+      <div class="kpi-sub">součet všech balíčků na skladě</div>
     </div>
     <div class="kpi-card blue">
-      <div class="kpi-icon">🏆</div>
-      <div class="kpi-label">TOP balíček</div>
-      <div class="kpi-value" style="font-size:18px;line-height:1.3">SET04</div>
-      <div class="kpi-sub">516 ks prodáno · 24 599 Kč tržba</div>
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">Průměrná cena balíčku</div>
+      <div class="kpi-value" id="kpi-avg-price">—</div>
+      <div class="kpi-sub" id="kpi-price-range">—</div>
     </div>
   </div>
 
   <!-- CHARTS ROW -->
   <div class="two-col">
-    <!-- BAR CHART: TOP balíčků -->
+    <!-- BAR CHART: Stock by product -->
     <div class="section">
-      <div class="section-title"><span class="title-icon">🏅</span> TOP balíčky podle prodeje (ks)</div>
+      <div class="section-title"><span class="title-icon">🏪</span> TOP balíčky podle skladu (ks)</div>
       <div class="chart-wrap">
-        <canvas id="chartTop"></canvas>
+        <canvas id="chartStock"></canvas>
       </div>
     </div>
-    <!-- LINE CHART: Trend po měsících -->
+    <!-- BAR CHART: Price distribution -->
     <div class="section">
-      <div class="section-title"><span class="title-icon">📈</span> Prodej balíčků po měsících 2026</div>
+      <div class="section-title"><span class="title-icon">💰</span> Ceny balíčků (Kč) — TOP 15</div>
       <div class="chart-wrap">
-        <canvas id="chartTrend"></canvas>
+        <canvas id="chartPrice"></canvas>
       </div>
     </div>
   </div>
 
-  <!-- REVENUE PER PRODUCT CHART -->
+  <!-- VISIBILITY BREAKDOWN -->
   <div class="section">
-    <div class="section-title"><span class="title-icon">💰</span> Tržba podle balíčku (Kč)</div>
+    <div class="section-title"><span class="title-icon">👁️</span> Viditelnost a dostupnost</div>
     <div class="chart-wrap">
-      <canvas id="chartRevenue" style="max-height:260px"></canvas>
+      <canvas id="chartStatus" style="max-height:180px"></canvas>
     </div>
   </div>
 
   <!-- TABLE -->
   <div class="section">
     <div class="section-title"><span class="title-icon">📋</span> Přehled balíčků</div>
+    <div class="info-note">
+      ℹ️ Data z katalogu e-shopu (sekce <strong>Akční balíčky</strong>). Prodejní statistiky budou doplněny po propojení s historií objednávek.
+    </div>
     <div class="table-controls">
       <input class="search-box" type="text" id="searchInput" placeholder="🔍 Hledat balíček..." oninput="filterTable()">
-      <button class="filter-btn active" onclick="setFilter('all', this)">Vše</button>
+      <button class="filter-btn active" onclick="setFilter('all', this)">Vše (51)</button>
       <button class="filter-btn" onclick="setFilter('visible', this)">Aktivní</button>
       <button class="filter-btn" onclick="setFilter('hidden', this)">Skryté</button>
       <button class="filter-btn" onclick="setFilter('instock', this)">Skladem</button>
-      <button class="filter-btn" onclick="setFilter('outofstock', this)">Vyprodáno</button>
+      <button class="filter-btn" onclick="setFilter('outofstock', this)">Vyprodáno / 0 ks</button>
     </div>
     <div class="table-wrap">
       <table class="data-table" id="mainTable">
@@ -420,12 +434,10 @@ body {
           <tr>
             <th onclick="sortTable(0)" class="sorted">Název <span class="sort-icon">↕</span></th>
             <th onclick="sortTable(1)">Kód <span class="sort-icon">↕</span></th>
-            <th onclick="sortTable(2)">Prodáno ks <span class="sort-icon">↕</span></th>
-            <th onclick="sortTable(3)">Tržba (Kč) <span class="sort-icon">↕</span></th>
-            <th onclick="sortTable(4)">Prům. cena <span class="sort-icon">↕</span></th>
-            <th onclick="sortTable(5)">Sklad <span class="sort-icon">↕</span></th>
-            <th onclick="sortTable(6)">Cen. list <span class="sort-icon">↕</span></th>
-            <th>Stav</th>
+            <th onclick="sortTable(2)">Cena (Kč) <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable(3)">Sklad (ks) <span class="sort-icon">↕</span></th>
+            <th>Viditelnost</th>
+            <th>Stav skladu</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -440,30 +452,63 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 // ═══════════════════════════════════════════
-// DATA (embedded from API)
+// DATA — sekce 500 "Akční balíčky" z API
+// Zdroj: products(filter:{section:500}), 8. 4. 2026
 // ═══════════════════════════════════════════
 const PRODUCTS = [
-  { code: 'SET04',    name: 'SET04',                                                 qty: 516,  revenue: 24599,  avg_price: 47.68,  inStore: 0,   price: 762,  visible: false },
-  { code: '20101',   name: 'Sada s extraktem ženšenu: šampon a maska na vlasy',      qty: 405,  revenue: 88969,  avg_price: 219.68, inStore: 114, price: 392,  visible: true  },
-  { code: 'SET08',   name: 'SET08',                                                  qty: 103,  revenue: 17131,  avg_price: 166.32, inStore: 5,   price: 264,  visible: false },
-  { code: 'SET03',   name: 'Zázvorový nápoj 2+1',                                   qty: 80,   revenue: 0,      avg_price: 0,      inStore: 76,  price: 111,  visible: false },
-  { code: 'SET09',   name: 'SET09',                                                  qty: 69,   revenue: 12139,  avg_price: 175.93, inStore: 2,   price: 300,  visible: true  },
-  { code: 'VYZSET1', name: 'Set královských vzorků',                                 qty: 4,    revenue: 0,      avg_price: 0,      inStore: 0,   price: 75,   visible: false },
+  { id: 6648,  code: '—',     name: 'Absolutní pohodlí a ochrana',                                      price: 935,  inStore: 0,   visible: false },
+  { id: 6653,  code: '—',     name: 'Bio Rehab - aktivátor růstu',                                      price: 1340, inStore: 925, visible: true  },
+  { id: 6654,  code: 'BA451', name: 'Bio Rehab - aktivátor růstu vlasů',                                price: 1992, inStore: 28,  visible: false },
+  { id: 6656,  code: '—',     name: 'Dokonalý úklid bez chemie',                                        price: 2530, inStore: 0,   visible: false },
+  { id: 6658,  code: '—',     name: 'Královské brožury',                                                price: 115,  inStore: 0,   visible: false },
+  { id: 6659,  code: '—',     name: 'Master Herb - STOPka pro padající vlasy',                          price: 1051, inStore: 73,  visible: false },
+  { id: 6660,  code: '—',     name: 'Ovečková řada pro krásnou pleť',                                   price: 756,  inStore: 179, visible: true  },
+  { id: 6662,  code: '—',     name: 'Rybičky - séra pro krásnou pleť',                                  price: 1172, inStore: 0,   visible: false },
+  { id: 6663,  code: '—',     name: 'Šampon pro hloubkové čištění a kondicionér',                       price: 817,  inStore: 107, visible: true  },
+  { id: 6664,  code: '—',     name: 'Šampony a balzám pro mastící se vlasy',                            price: 1124, inStore: 82,  visible: false },
+  { id: 6665,  code: '—',     name: 'Šampony a balzám pro vlasy s lupy',                                price: 1188, inStore: 107, visible: false },
+  { id: 6666,  code: '—',     name: 'Smíšená pleť',                                                     price: 2661, inStore: 8,   visible: false },
+  { id: 6667,  code: '—',     name: 'Suchá pleť',                                                       price: 2481, inStore: 0,   visible: false },
+  { id: 7141,  code: 'YZ776', name: 'Základní menstruační balíček - Nefritový start',                   price: 537,  inStore: 892, visible: true  },
+  { id: 7142,  code: 'CG170', name: 'Kompletní menstruační péče - Nefritová harmonie',                  price: 929,  inStore: 892, visible: true  },
+  { id: 7143,  code: 'AG295', name: 'Balíček pro zralou ženu 50+ Nefritová svěžest',                    price: 1184, inStore: 0,   visible: false },
+  { id: 7224,  code: 'DY368', name: 'Kúra pro prevenci zdraví',                                         price: 3250, inStore: 0,   visible: false },
+  { id: 7225,  code: 'FP725', name: 'Revoluce pro omlazení pleti',                                      price: 3035, inStore: 64,  visible: true  },
+  { id: 7226,  code: 'FA725', name: 'Novinka pro citlivou pleť',                                        price: 2962, inStore: 0,   visible: false },
+  { id: 7227,  code: 'QV908', name: 'Stop akné',                                                        price: 2039, inStore: 38,  visible: false },
+  { id: 7228,  code: 'ZD676', name: 'Krásná pleť bez nedokonalostí',                                    price: 2980, inStore: 368, visible: true  },
+  { id: 7229,  code: 'WX129', name: 'Ochrana a výživa přes zimu',                                       price: 1692, inStore: 257, visible: false },
+  { id: 7230,  code: 'TF015', name: 'Okouzlující líčení',                                               price: 2299, inStore: 0,   visible: false },
+  { id: 7231,  code: 'BR864', name: 'Ekologická domácnost',                                             price: 2345, inStore: 0,   visible: false },
+  { id: 7232,  code: 'IA574', name: 'STOP Padání vlasů',                                                price: 1861, inStore: 0,   visible: false },
+  { id: 7233,  code: 'LE127', name: 'Péče o pleť jako ze salonu',                                       price: 5158, inStore: 0,   visible: false },
+  { id: 7234,  code: 'UY539', name: 'Zdravé a husté vlasy',                                             price: 2150, inStore: 0,   visible: false },
+  { id: 7235,  code: 'OA320', name: 'Luxusní péče o tělo',                                              price: 1653, inStore: 65,  visible: true  },
+  { id: 7236,  code: 'CI911', name: 'Rekonstrukce poškozených vlasů',                                   price: 1326, inStore: 0,   visible: false },
+  { id: 7237,  code: 'PK769', name: 'STOP mastícím se vlasům',                                          price: 1701, inStore: 0,   visible: false },
+  { id: 7238,  code: 'QV129', name: 'Zdravé zuby a svěží dech',                                         price: 1211, inStore: 0,   visible: false },
+  { id: 7239,  code: 'MY016', name: 'Domácí lékárnička - úleva od bolestí',                             price: 1510, inStore: 0,   visible: false },
+  { id: 7240,  code: 'UY175', name: 'Domácí lékárnička - úleva od nachlazení',                          price: 1597, inStore: 0,   visible: false },
+  { id: 7241,  code: 'KQ062', name: 'Relaxační SPA rituál',                                             price: 1430, inStore: 209, visible: true  },
+  { id: 7242,  code: 'CD432', name: 'Domácí lékárnička - radost z pohybu',                              price: 3848, inStore: 0,   visible: false },
+  { id: 7243,  code: 'DH975', name: 'Domácí lékárnička - vždy v kondici',                               price: 2763, inStore: 0,   visible: false },
+  { id: 7244,  code: 'TF452', name: 'Zdravá žena 15+',                                                  price: 1268, inStore: 313, visible: true  },
+  { id: 7245,  code: 'AS010', name: 'Domácí lékárnička - síla turmalínu',                               price: 4229, inStore: 0,   visible: false },
+  { id: 7246,  code: 'BS062', name: 'Domácí lékárnička - SOS při migréně',                              price: 2181, inStore: 0,   visible: false },
+  { id: 7247,  code: 'OT111', name: 'Očista organismu',                                                 price: 3217, inStore: 208, visible: false },
+  { id: 7248,  code: 'AE593', name: 'Plánujeme miminko',                                                price: 3048, inStore: 0,   visible: false },
+  { id: 7249,  code: 'ZW017', name: 'Věčné mládí pleti',                                                price: 2566, inStore: 0,   visible: false },
+  { id: 7251,  code: 'JU686', name: 'Zdravá žena 45+',                                                  price: 2692, inStore: 0,   visible: false },
+  { id: 7252,  code: 'FZ019', name: 'Pro klouby jako za mlada',                                         price: 2326, inStore: 0,   visible: false },
+  { id: 7253,  code: 'WH619', name: 'Pro aktivní sportovce',                                            price: 1136, inStore: 0,   visible: false },
+  { id: 7254,  code: 'EH959', name: 'Speciálně pro muže',                                               price: 1727, inStore: 0,   visible: false },
+  { id: 7283,  code: 'IA655', name: 'Bio Rehab - zdravé a silné vlasy bez padání',                      price: 2132, inStore: 0,   visible: false },
+  { id: 7291,  code: 'WO122', name: 'Rozjasněná pleť',                                                  price: 1078, inStore: 0,   visible: false },
+  { id: 7298,  code: 'HD784', name: 'Pro tatínky, kteří celé dny usilovně pracují',                     price: 2458, inStore: 338, visible: true  },
+  { id: 7299,  code: 'TM904', name: 'Pro maminky, které zapomínají na sebe',                            price: 2294, inStore: 0,   visible: false },
+  { id: 8130,  code: 'GS162', name: 'Kompletní sada pro čistou domácnost',                              price: 2676, inStore: 194, visible: false },
+  { id: 8132,  code: 'BE906', name: 'Balíček Vitalita v přechodu - přírodní síla pro hormonální pohodu', price: 1519, inStore: 448, visible: false },
 ];
-
-const MONTHLY = {
-  '2026-01': { qty: 746, revenue: 70494 },
-  '2026-02': { qty: 248, revenue: 33316 },
-  '2026-03': { qty: 159, revenue: 34482 },
-  '2026-04': { qty: 24,  revenue: 4546  },
-};
-
-const TOTALS = {
-  qty: 1177,
-  revenue: 142839,
-  orders_revenue: 50596666,
-  pct: 0.2823,
-};
 
 // ═══════════════════════════════════════════
 // HELPERS
@@ -472,23 +517,38 @@ function czNum(n, decimals = 0) {
   if (n === null || n === undefined) return '—';
   return n.toLocaleString('cs-CZ', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 }
-
 function czCur(n) {
   if (!n && n !== 0) return '—';
   return czNum(n, 0) + ' Kč';
 }
-
 function stockBadge(inStore, visible) {
-  if (inStore > 10) return `<span class="badge badge-green">Skladem (${czNum(inStore)})</span>`;
-  if (inStore > 0)  return `<span class="badge badge-yellow">Poslední kusy (${czNum(inStore)})</span>`;
-  if (!visible)     return `<span class="badge badge-gray">Skryté / 0 ks</span>`;
+  if (inStore > 10)  return `<span class="badge badge-green">Skladem (${czNum(inStore)})</span>`;
+  if (inStore > 0)   return `<span class="badge badge-yellow">Poslední kusy (${czNum(inStore)})</span>`;
+  if (!visible)      return `<span class="badge badge-gray">Skryté / 0 ks</span>`;
   return `<span class="badge badge-red">Vyprodáno</span>`;
 }
-
 function visibleBadge(visible) {
   return visible
     ? `<span class="badge badge-green">Aktivní</span>`
     : `<span class="badge badge-gray">Skryté</span>`;
+}
+
+// ═══════════════════════════════════════════
+// KPI INIT
+// ═══════════════════════════════════════════
+function initKPIs() {
+  const total = PRODUCTS.length;
+  const visibleCount = PRODUCTS.filter(p => p.visible).length;
+  const totalStock = PRODUCTS.reduce((s, p) => s + p.inStore, 0);
+  const avgPrice = Math.round(PRODUCTS.reduce((s, p) => s + p.price, 0) / total);
+  const minPrice = Math.min(...PRODUCTS.map(p => p.price));
+  const maxPrice = Math.max(...PRODUCTS.map(p => p.price));
+
+  document.getElementById('kpi-total').textContent = total;
+  document.getElementById('kpi-visible').textContent = visibleCount;
+  document.getElementById('kpi-stock').textContent = czNum(totalStock) + ' ks';
+  document.getElementById('kpi-avg-price').textContent = czCur(avgPrice);
+  document.getElementById('kpi-price-range').textContent = `rozsah: ${czCur(minPrice)} – ${czCur(maxPrice)}`;
 }
 
 // ═══════════════════════════════════════════
@@ -501,7 +561,6 @@ function toggleTheme() {
   document.querySelector('.theme-toggle').lastChild.textContent = isDark ? ' Tmavý režim' : ' Světlý režim';
   updateCharts();
 }
-
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('overlay').classList.toggle('show');
@@ -510,9 +569,9 @@ function toggleSidebar() {
 // ═══════════════════════════════════════════
 // CHARTS
 // ═══════════════════════════════════════════
-const COLORS = ['#5C2450','#e6a817','#22c55e','#3b82f6','#ef4444','#8b5cf6','#f59e0b'];
-
-let chartTop, chartTrend, chartRevenue;
+const COLORS = ['#5C2450','#e6a817','#22c55e','#3b82f6','#ef4444','#8b5cf6','#f59e0b',
+                '#06b6d4','#ec4899','#84cc16','#f97316','#a855f7','#14b8a6','#64748b','#dc2626'];
+let chartStock, chartPrice, chartStatus;
 
 function getChartColors() {
   const isDark = document.body.getAttribute('data-theme') === 'dark';
@@ -524,20 +583,18 @@ function getChartColors() {
 }
 
 function buildCharts() {
-  const { gridColor, textColor, tickColor } = getChartColors();
-  const isDark = document.body.getAttribute('data-theme') === 'dark';
+  const { gridColor, tickColor } = getChartColors();
 
-  // ── TOP BAR CHART ──
-  const sortedProd = [...PRODUCTS].sort((a, b) => b.qty - a.qty);
-  const ctxTop = document.getElementById('chartTop').getContext('2d');
-  chartTop = new Chart(ctxTop, {
+  // ── TOP STOCK BAR CHART ──
+  const topStock = [...PRODUCTS].filter(p => p.inStore > 0).sort((a, b) => b.inStore - a.inStore).slice(0, 12);
+  chartStock = new Chart(document.getElementById('chartStock').getContext('2d'), {
     type: 'bar',
     data: {
-      labels: sortedProd.map(p => p.code),
+      labels: topStock.map(p => p.code !== '—' ? p.code : p.name.split(' ').slice(0,3).join(' ')),
       datasets: [{
-        label: 'Prodáno ks',
-        data: sortedProd.map(p => p.qty),
-        backgroundColor: COLORS,
+        label: 'Sklad (ks)',
+        data: topStock.map(p => p.inStore),
+        backgroundColor: topStock.map((_, i) => COLORS[i % COLORS.length]),
         borderRadius: 6,
         borderSkipped: false,
       }]
@@ -546,150 +603,96 @@ function buildCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: {
-          callbacks: {
-            title: (items) => sortedProd[items[0].dataIndex].name,
-            label: (item) => ` ${czNum(item.raw)} ks`,
-          }
-        }
+        tooltip: { callbacks: {
+          title: (items) => topStock[items[0].dataIndex].name,
+          label: (item) => ` ${czNum(item.raw)} ks na skladě`,
+        }}
       },
       scales: {
-        x: { ticks: { color: tickColor }, grid: { color: gridColor } },
-        y: {
-          ticks: { color: tickColor, callback: v => czNum(v) + ' ks' },
-          grid: { color: gridColor },
-          beginAtZero: true,
-        }
+        x: { ticks: { color: tickColor, maxRotation: 35 }, grid: { color: gridColor } },
+        y: { ticks: { color: tickColor, callback: v => czNum(v) + ' ks' }, grid: { color: gridColor }, beginAtZero: true }
       }
     }
   });
 
-  // ── TREND LINE CHART ──
-  const months = Object.keys(MONTHLY);
-  const monthLabels = { '2026-01': 'Leden', '2026-02': 'Únor', '2026-03': 'Březen', '2026-04': 'Duben' };
-  const ctxTrend = document.getElementById('chartTrend').getContext('2d');
-  chartTrend = new Chart(ctxTrend, {
-    type: 'line',
-    data: {
-      labels: months.map(m => monthLabels[m] || m),
-      datasets: [
-        {
-          label: 'Prodáno ks',
-          data: months.map(m => MONTHLY[m].qty),
-          borderColor: '#5C2450',
-          backgroundColor: 'rgba(92,36,80,0.12)',
-          tension: 0.4,
-          fill: true,
-          pointRadius: 5,
-          pointBackgroundColor: '#5C2450',
-          yAxisID: 'yQty',
-        },
-        {
-          label: 'Tržba (Kč)',
-          data: months.map(m => MONTHLY[m].revenue),
-          borderColor: '#e6a817',
-          backgroundColor: 'rgba(230,168,23,0.08)',
-          tension: 0.4,
-          fill: false,
-          pointRadius: 5,
-          pointBackgroundColor: '#e6a817',
-          yAxisID: 'yRev',
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          labels: { color: tickColor, boxWidth: 12 }
-        },
-        tooltip: {
-          callbacks: {
-            label: (item) => item.datasetIndex === 0
-              ? ` ${czNum(item.raw)} ks`
-              : ` ${czCur(item.raw)}`,
-          }
-        }
-      },
-      scales: {
-        x: { ticks: { color: tickColor }, grid: { color: gridColor } },
-        yQty: {
-          type: 'linear', position: 'left',
-          ticks: { color: '#5C2450', callback: v => czNum(v) + ' ks' },
-          grid: { color: gridColor },
-          beginAtZero: true,
-        },
-        yRev: {
-          type: 'linear', position: 'right',
-          ticks: { color: '#e6a817', callback: v => czNum(v/1000) + ' tis.' },
-          grid: { drawOnChartArea: false },
-          beginAtZero: true,
-        }
-      }
-    }
-  });
-
-  // ── REVENUE BAR CHART ──
-  const sortedByRev = [...PRODUCTS].sort((a, b) => b.revenue - a.revenue);
-  const ctxRev = document.getElementById('chartRevenue').getContext('2d');
-  chartRevenue = new Chart(ctxRev, {
+  // ── TOP PRICE BAR CHART ──
+  const topPrice = [...PRODUCTS].sort((a, b) => b.price - a.price).slice(0, 15);
+  chartPrice = new Chart(document.getElementById('chartPrice').getContext('2d'), {
     type: 'bar',
     data: {
-      labels: sortedByRev.map(p => p.code),
+      labels: topPrice.map(p => p.code !== '—' ? p.code : p.name.split(' ').slice(0,3).join(' ')),
       datasets: [{
-        label: 'Tržba (Kč)',
-        data: sortedByRev.map(p => p.revenue),
-        backgroundColor: COLORS,
+        label: 'Cena (Kč)',
+        data: topPrice.map(p => p.price),
+        backgroundColor: topPrice.map((_, i) => COLORS[i % COLORS.length]),
         borderRadius: 6,
         borderSkipped: false,
       }]
     },
     options: {
-      indexAxis: 'y',
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: {
-          callbacks: {
-            title: (items) => sortedByRev[items[0].dataIndex].name,
-            label: (item) => ` ${czCur(item.raw)}`,
-          }
-        }
+        tooltip: { callbacks: {
+          title: (items) => topPrice[items[0].dataIndex].name,
+          label: (item) => ` ${czCur(item.raw)}`,
+        }}
       },
       scales: {
-        x: {
-          ticks: { color: tickColor, callback: v => czNum(v/1000) + ' tis. Kč' },
-          grid: { color: gridColor },
-          beginAtZero: true,
-        },
-        y: { ticks: { color: tickColor }, grid: { color: gridColor } }
+        x: { ticks: { color: tickColor, maxRotation: 35 }, grid: { color: gridColor } },
+        y: { ticks: { color: tickColor, callback: v => czNum(v) + ' Kč' }, grid: { color: gridColor }, beginAtZero: true }
+      }
+    }
+  });
+
+  // ── STATUS DOUGHNUT ──
+  const visibleInStock  = PRODUCTS.filter(p => p.visible && p.inStore > 0).length;
+  const visibleNoStock  = PRODUCTS.filter(p => p.visible && p.inStore === 0).length;
+  const hiddenInStock   = PRODUCTS.filter(p => !p.visible && p.inStore > 0).length;
+  const hiddenNoStock   = PRODUCTS.filter(p => !p.visible && p.inStore === 0).length;
+
+  chartStatus = new Chart(document.getElementById('chartStatus').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Aktivní + skladem', 'Aktivní + vyprodáno', 'Skryté + skladem', 'Skryté + 0 ks'],
+      datasets: [{
+        data: [visibleInStock, visibleNoStock, hiddenInStock, hiddenNoStock],
+        backgroundColor: ['#22c55e', '#f59e0b', '#3b82f6', '#6b7280'],
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'right', labels: { color: tickColor, boxWidth: 14, padding: 16 } },
+        tooltip: { callbacks: { label: (item) => ` ${item.label}: ${item.raw} balíčků` } }
       }
     }
   });
 }
 
 function updateCharts() {
-  const { gridColor, textColor, tickColor } = getChartColors();
-  [chartTop, chartTrend, chartRevenue].forEach(ch => {
+  const { gridColor, tickColor } = getChartColors();
+  [chartStock, chartPrice].forEach(ch => {
     if (!ch) return;
-    ch.options.scales && Object.values(ch.options.scales).forEach(scale => {
+    Object.values(ch.options.scales || {}).forEach(scale => {
       if (scale.ticks) scale.ticks.color = tickColor;
       if (scale.grid) scale.grid.color = gridColor;
     });
-    if (ch.options.plugins?.legend?.labels) {
-      ch.options.plugins.legend.labels.color = tickColor;
-    }
     ch.update();
   });
+  if (chartStatus) {
+    chartStatus.options.plugins.legend.labels.color = tickColor;
+    chartStatus.update();
+  }
 }
 
 // ═══════════════════════════════════════════
 // TABLE
 // ═══════════════════════════════════════════
 let currentFilter = 'all';
-let sortCol = 2;
-let sortAsc = false;
-let tableData = [...PRODUCTS];
+let sortCol = 0;
+let sortAsc = true;
 
 function buildTable(data) {
   const tbody = document.getElementById('tableBody');
@@ -704,30 +707,26 @@ function buildTable(data) {
   }
   noData.style.display = 'none';
 
-  let totalQty = 0, totalRev = 0;
+  let totalStock = 0;
 
   tbody.innerHTML = data.map((p, i) => {
-    totalQty += p.qty;
-    totalRev += p.revenue;
-    const rank = i < 3 ? `<span class="rank-num ${i===0?'gold':''}">${i+1}</span>` : `<span style="width:24px;display:inline-block;text-align:center;color:var(--text-muted)">${i+1}</span>`;
-    return `<tr data-code="${p.code}" data-visible="${p.visible}" data-instore="${p.inStore}">
+    totalStock += p.inStore;
+    const rank = i < 3
+      ? `<span class="rank-num ${i===0?'gold':''}">${i+1}</span>`
+      : `<span style="width:24px;display:inline-block;text-align:center;color:var(--text-muted)">${i+1}</span>`;
+    return `<tr>
       <td><div class="rank">${rank} ${p.name}</div></td>
       <td>${p.code}</td>
-      <td><strong>${czNum(p.qty)}</strong></td>
-      <td>${p.revenue > 0 ? czCur(p.revenue) : '<span style="color:var(--text-muted)">0 Kč</span>'}</td>
-      <td>${p.avg_price > 0 ? czCur(p.avg_price) : '<span style="color:var(--text-muted)">zdarma</span>'}</td>
-      <td>${czNum(p.inStore)} ks</td>
       <td>${czCur(p.price)}</td>
+      <td><strong>${czNum(p.inStore)}</strong></td>
+      <td>${visibleBadge(p.visible)}</td>
       <td>${stockBadge(p.inStore, p.visible)}</td>
     </tr>`;
   }).join('');
 
   tfoot.innerHTML = `<tr>
-    <td colspan="2"><strong>Celkem</strong></td>
-    <td><strong>${czNum(totalQty)} ks</strong></td>
-    <td><strong>${czCur(totalRev)}</strong></td>
-    <td>—</td>
-    <td>—</td>
+    <td colspan="3"><strong>Celkem ${data.length} balíčků</strong></td>
+    <td><strong>${czNum(totalStock)} ks</strong></td>
     <td>—</td>
     <td>—</td>
   </tr>`;
@@ -756,8 +755,8 @@ function setFilter(f, btn) {
 }
 
 function sortData(data) {
-  const cols = ['name', 'code', 'qty', 'revenue', 'avg_price', 'inStore', 'price'];
-  const col = cols[sortCol] || 'qty';
+  const cols = ['name', 'code', 'price', 'inStore'];
+  const col = cols[sortCol] || 'name';
   return [...data].sort((a, b) => {
     let va = a[col], vb = b[col];
     if (typeof va === 'string') va = va.toLowerCase();
@@ -768,12 +767,8 @@ function sortData(data) {
 
 function sortTable(col) {
   const ths = document.querySelectorAll('.data-table thead th');
-  if (sortCol === col) {
-    sortAsc = !sortAsc;
-  } else {
-    sortCol = col;
-    sortAsc = false;
-  }
+  if (sortCol === col) sortAsc = !sortAsc;
+  else { sortCol = col; sortAsc = false; }
   ths.forEach((th, i) => {
     th.classList.toggle('sorted', i === col);
     const icon = th.querySelector('.sort-icon');
@@ -786,8 +781,9 @@ function sortTable(col) {
 // INIT
 // ═══════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
+  initKPIs();
   buildCharts();
-  sortTable(2); // default sort by qty desc
+  sortTable(0);
 });
 </script>
 </body>
