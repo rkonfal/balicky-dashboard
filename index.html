@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Přehled balíčků — Diamond Plus</title>
+<title>Prodej akčních balíčků — Diamond Plus</title>
 <style>
 :root {
   --brand: #5C2450;
@@ -75,8 +75,10 @@ body {
   display: flex; align-items: center; gap: 12px;
   padding: 11px 24px;
   color: rgba(255,255,255,.75);
-  text-decoration: none; font-size: 13.5px; font-weight: 500;
-  border-left: 3px solid transparent; transition: all .2s;
+  text-decoration: none;
+  font-size: 13.5px; font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: all .2s;
 }
 .sidebar-nav a:hover, .sidebar-nav a.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--accent); }
 .sidebar-nav a svg { width: 18px; height: 18px; flex-shrink: 0; }
@@ -96,15 +98,18 @@ body {
 [data-theme="dark"] .header h1 { color: var(--brand-light); }
 .header .period { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
 .header-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
-.theme-toggle { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; }
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 32px; }
+.theme-toggle {
+  background: var(--card); border: 1px solid var(--border); color: var(--text);
+  padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  display: flex; align-items: center; gap: 6px;
+}
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 32px; }
 .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; position: relative; overflow: hidden; }
 .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
 .kpi-card.purple::before { background: var(--brand); }
 .kpi-card.gold::before { background: var(--accent); }
 .kpi-card.red::before { background: var(--danger); }
 .kpi-card.green::before { background: var(--success); }
-.kpi-card.blue::before { background: #3b82f6; }
 .kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .7px; font-weight: 600; }
 .kpi-value { font-size: 32px; font-weight: 800; margin: 6px 0 2px; }
 .kpi-sub { font-size: 12.5px; color: var(--text-muted); }
@@ -112,62 +117,77 @@ body {
 .section-title { font-size: 17px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 .section-title svg { width: 20px; height: 20px; color: var(--brand); flex-shrink: 0; }
 [data-theme="dark"] .section-title svg { color: var(--brand-light); }
-.filter-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
-.filter-bar input[type="text"] {
-  flex: 1; min-width: 200px; padding: 9px 14px;
-  border: 1px solid var(--border); border-radius: 8px;
-  font-size: 13px; background: var(--bg); color: var(--text); outline: none; transition: border-color .2s;
+.bar-item { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+.bar-rank { width: 26px; text-align: right; font-size: 12px; color: var(--text-muted); font-weight: 600; flex-shrink: 0; }
+.bar-label-name { width: 300px; flex-shrink: 0; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.bar-track { flex: 1; height: 24px; background: var(--border); border-radius: 6px; overflow: hidden; min-width: 80px; }
+.bar-fill {
+  height: 100%; border-radius: 6px;
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-light) 100%);
+  display: flex; align-items: center; padding-left: 8px;
+  color: #fff; font-size: 11px; font-weight: 700;
+  transition: width .6s ease; min-width: 36px; white-space: nowrap;
 }
-.filter-bar input[type="text"]:focus { border-color: var(--brand); }
-.filter-bar select { padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; background: var(--bg); color: var(--text); cursor: pointer; outline: none; }
-.filter-count { font-size: 13px; color: var(--text-muted); white-space: nowrap; padding: 9px 0; }
+.bar-fill.accent { background: linear-gradient(90deg, var(--accent) 0%, #f5c842 100%); color: #333; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.donut-wrapper { display: flex; align-items: center; justify-content: center; gap: 36px; flex-wrap: wrap; }
+.donut-stats { min-width: 160px; }
+.donut-stat { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+.donut-stat:last-child { border-bottom: none; }
+.donut-stat .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; flex-shrink: 0; }
+.donut-stat-left { display: flex; align-items: center; }
+.donut-stat-right { font-weight: 700; }
+.table-controls { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.search-box { flex: 1; min-width: 200px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 13.5px; outline: none; }
+.search-box:focus { border-color: var(--brand-light); }
+.filter-select { padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 13.5px; cursor: pointer; outline: none; }
+.table-info { font-size: 13px; color: var(--text-muted); }
 .table-wrap { overflow-x: auto; }
 .data-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
 .data-table thead th {
   background: var(--brand); color: #fff;
   padding: 11px 14px; text-align: right;
-  font-weight: 600; font-size: 12px; letter-spacing: .3px; white-space: nowrap;
+  font-weight: 600; font-size: 12px; letter-spacing: .3px;
+  white-space: nowrap; cursor: pointer; user-select: none;
 }
 .data-table thead th:first-child { text-align: left; border-radius: 8px 0 0 0; }
 .data-table thead th:last-child { border-radius: 0 8px 0 0; }
-.data-table thead th.sortable { cursor: pointer; user-select: none; }
-.data-table thead th.sortable:hover { background: var(--brand-light); }
-.data-table thead th.sort-asc .sort-arrow::after { content: ' ↑'; }
-.data-table thead th.sort-desc .sort-arrow::after { content: ' ↓'; }
-.sort-arrow { opacity: .6; }
-.data-table tbody td { padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--border); }
-.data-table tbody td:first-child { text-align: left; font-weight: 600; }
-.data-table tbody td.code-cell { text-align: left; }
+.data-table thead th:hover { background: var(--brand-light); }
+.data-table thead th .si { margin-left: 4px; opacity: .4; }
+.data-table thead th.sa .si::after { content: ' ↑'; opacity: 1; }
+.data-table thead th.sd .si::after { content: ' ↓'; opacity: 1; }
+.data-table tbody td { padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.data-table tbody td:first-child { text-align: left; }
+.data-table tbody td.nc { max-width: 280px; text-align: left; }
 .data-table tbody tr:hover { background: rgba(92,36,80,.04); }
 [data-theme="dark"] .data-table tbody tr:hover { background: rgba(155,100,144,.08); }
-.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-.badge.vis-yes { background: #dcfce7; color: #15803d; }
-.badge.vis-no { background: #f1f5f9; color: #64748b; }
-.badge.stock-ok { background: #dbeafe; color: #1d4ed8; }
-.badge.stock-low { background: #fef3c7; color: #b45309; }
-.badge.stock-out { background: #fee2e2; color: #dc2626; }
-[data-theme="dark"] .badge.vis-yes { background: #14532d; color: #4ade80; }
-[data-theme="dark"] .badge.vis-no { background: #1e293b; color: #94a3b8; }
-[data-theme="dark"] .badge.stock-ok { background: #1e3a5f; color: #93c5fd; }
-[data-theme="dark"] .badge.stock-low { background: #44300a; color: #fcd34d; }
-[data-theme="dark"] .badge.stock-out { background: #450a0a; color: #fca5a5; }
-.chart-area { width: 100%; overflow-x: auto; }
-.bar-chart-wrapper { min-width: 480px; }
-.bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
-.bar-name { width: 270px; flex-shrink: 0; font-size: 12px; text-align: right; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bar-track { flex: 1; height: 24px; background: var(--border); border-radius: 6px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--brand) 0%, var(--brand-light) 100%); display: flex; align-items: center; padding-left: 10px; color: #fff; font-size: 11.5px; font-weight: 600; white-space: nowrap; transition: width .8s ease; }
-.bar-val { width: 110px; flex-shrink: 0; font-size: 12px; font-weight: 700; text-align: right; }
-.empty-state { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; }
+.data-table tfoot td { font-weight: 700; padding: 11px 14px; text-align: right; background: rgba(92,36,80,.06); border-top: 2px solid var(--brand); }
+.data-table tfoot td:first-child { text-align: left; }
+[data-theme="dark"] .data-table tfoot td { background: rgba(155,100,144,.1); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.badge-yes { background: #dcfce7; color: #15803d; }
+.badge-no { background: #fee2e2; color: #b91c1c; }
+[data-theme="dark"] .badge-yes { background: #14532d; color: #4ade80; }
+[data-theme="dark"] .badge-no { background: #450a0a; color: #f87171; }
+.rb { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-size: 12px; font-weight: 800; background: var(--brand); color: #fff; flex-shrink: 0; }
+.rb.t3 { background: var(--accent); color: #333; }
+.mbt { display: inline-block; width: 60px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; vertical-align: middle; margin-left: 6px; }
+.mbf { height: 100%; border-radius: 3px; background: var(--brand); }
 @media (max-width: 900px) {
   .sidebar { transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); }
   .hamburger { display: flex; }
   .overlay.show { display: block; }
   .main { margin-left: 0; padding: 24px 18px; padding-top: 68px; max-width: 100vw; }
+  .two-col { grid-template-columns: 1fr; }
+  .bar-label-name { width: 160px; }
 }
-@media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } .bar-name { width: 130px; } }
-@media print { .sidebar, .hamburger, .overlay, .theme-toggle { display: none !important; } .main { margin-left: 0; padding: 20px; max-width: 100vw; } .section { break-inside: avoid; } }
+@media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
+@media print {
+  .sidebar, .hamburger, .overlay, .theme-toggle { display: none !important; }
+  .main { margin-left: 0; padding: 20px; max-width: 100vw; }
+  .section { break-inside: avoid; }
+}
 </style>
 </head>
 <body>
@@ -175,7 +195,7 @@ body {
 <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
   <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
 </button>
-<div class="overlay" onclick="toggleSidebar()"></div>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
@@ -190,7 +210,7 @@ body {
     <a href="https://rkonfal.github.io/4px-carriers/"><span class="report-emoji">🚚</span> Přepravci</a>
     <a href="https://rkonfal.github.io/eshop-dashboard/"><span class="report-emoji">🛒</span> E-shop</a>
     <a href="https://rkonfal.github.io/inventory-dashboard/"><span class="report-emoji">📋</span> Sklad</a>
-    <a href="https://rkonfal.github.io/balicky-dashboard/" class="report-active"><span class="report-emoji">🎁</span> Balíčky</a>
+    <a href="#" class="report-active"><span class="report-emoji">🎁</span> Balíčky</a>
   </nav>
   <div class="sidebar-divider"></div>
   <nav class="sidebar-nav">
@@ -198,18 +218,22 @@ body {
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
       Přehled
     </a>
-    <a href="#catalog">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
-      Katalog balíčků
-    </a>
-    <a href="#chart">
+    <a href="#top20">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m6 0h6m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v10m6 0v-4a2 2 0 00-2-2h-2a2 2 0 00-2 2v4"/></svg>
-      Hodnota skladu
+      TOP 20 balíčků
+    </a>
+    <a href="#donut">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10"/></svg>
+      Rozdělení &amp; Tržby
+    </a>
+    <a href="#table">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+      Všechny balíčky
     </a>
   </nav>
   <div class="sidebar-footer">
-    Katalogová data WPJ API<br>
-    Aktualizováno 08.04.2026
+    Sestava k 06.04.2026<br>
+    WPJ Shop · Diamond Plus
   </div>
 </aside>
 
@@ -217,8 +241,8 @@ body {
   <div class="header" id="kpi">
     <div class="header-row">
       <div>
-        <h1>Přehled balíčků — Diamond Plus</h1>
-        <div class="period">Katalog sekce Balíčky &nbsp;|&nbsp; WPJ API &nbsp;|&nbsp; Království TianDe &nbsp;|&nbsp; 08.04.2026</div>
+        <h1>Prodej akčních balíčků — Diamond Plus</h1>
+        <div class="period">Sestava k 06.04.2026 &nbsp;|&nbsp; 129 balíčků &nbsp;|&nbsp; Zdroj: WPJ Shop</div>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
@@ -229,275 +253,363 @@ body {
 
   <div class="kpi-grid">
     <div class="kpi-card purple">
-      <div class="kpi-label">Balíčků v nabídce</div>
-      <div class="kpi-value" id="kpi-total">—</div>
-      <div class="kpi-sub">Celkem v sekci Balíčky</div>
-    </div>
-    <div class="kpi-card green">
-      <div class="kpi-label">Aktivní (viditelné)</div>
-      <div class="kpi-value" id="kpi-active">—</div>
-      <div class="kpi-sub" id="kpi-active-pct">z nabídky</div>
-    </div>
-    <div class="kpi-card red">
-      <div class="kpi-label">Skryté</div>
-      <div class="kpi-value" id="kpi-hidden">—</div>
-      <div class="kpi-sub" id="kpi-hidden-pct">z nabídky</div>
+      <div class="kpi-label">Celkem prodáno kusů</div>
+      <div class="kpi-value">1 733</div>
+      <div class="kpi-sub">ze 129 unikátních balíčků</div>
     </div>
     <div class="kpi-card gold">
-      <div class="kpi-label">Hodnota skladu (s DPH)</div>
-      <div class="kpi-value" id="kpi-stock-value">—</div>
-      <div class="kpi-sub" id="kpi-stock-ks">ks celkem</div>
+      <div class="kpi-label">Počet balíčků</div>
+      <div class="kpi-value">129</div>
+      <div class="kpi-sub">unikátních produktů v sestavě</div>
     </div>
-    <div class="kpi-card blue">
-      <div class="kpi-label">Balíčků na skladě</div>
-      <div class="kpi-value" id="kpi-instock-count">—</div>
-      <div class="kpi-sub">Má alespoň 1 kus</div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Odhadovaná tržba</div>
+      <div class="kpi-value">990 tis.</div>
+      <div class="kpi-sub">990 909 Kč (qty × cena s DPH)</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">TOP balíček</div>
+      <div class="kpi-value" style="font-size:18px;line-height:1.3">52902/03</div>
+      <div class="kpi-sub">Lingzhi maska — 603 ks (35 % prodeje)</div>
     </div>
   </div>
 
-  <div class="section" id="catalog">
+  <div class="section" id="top20">
+    <div class="section-title">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m6 0h6m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v10m6 0v-4a2 2 0 00-2-2h-2a2 2 0 00-2 2v4"/></svg>
+      TOP 20 balíčků podle počtu prodaných kusů
+    </div>
+    <div id="barChart"></div>
+  </div>
+
+  <div class="two-col" id="donut">
+    <div class="section">
+      <div class="section-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10"/></svg>
+        TOP 10 vs zbytek (ks)
+      </div>
+      <div class="donut-wrapper">
+        <svg id="donutSvg" viewBox="0 0 200 200" width="180" height="180"></svg>
+        <div class="donut-stats" id="donutStats"></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 12v-2"/></svg>
+        TOP 10 podle odhadované tržby
+      </div>
+      <div id="revChart"></div>
+    </div>
+  </div>
+
+  <div class="section" id="table">
     <div class="section-title">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
-      Katalog balíčků
+      Všechny balíčky — 129 produktů
     </div>
-    <div class="filter-bar">
-      <input type="text" id="searchInput" placeholder="Hledat podle názvu nebo kódu…" oninput="applyFilters()">
-      <select id="visFilter" onchange="applyFilters()">
-        <option value="">Viditelnost: vše</option>
-        <option value="true">Aktivní (viditelné)</option>
-        <option value="false">Skryté</option>
+    <div class="table-controls">
+      <input type="text" class="search-box" id="searchBox" placeholder="Hledat podle kódu nebo názvu…" oninput="filterTable()">
+      <select class="filter-select" id="visFilter" onchange="filterTable()">
+        <option value="">Všechny (viditelnost)</option>
+        <option value="ano">Viditelné (Ano)</option>
+        <option value="ne">Skryté (Ne)</option>
       </select>
-      <select id="stockFilter" onchange="applyFilters()">
-        <option value="">Sklad: vše</option>
-        <option value="instock">Na skladě (&gt; 0 ks)</option>
-        <option value="outstock">Vyprodáno (0 ks)</option>
-        <option value="low">Nízký sklad (1–49 ks)</option>
-      </select>
-      <span class="filter-count" id="filterCount">Načítám…</span>
+      <span class="table-info" id="tableInfo"></span>
     </div>
     <div class="table-wrap">
-      <table class="data-table" id="catalogTable">
+      <table class="data-table" id="mainTable">
         <thead>
           <tr>
-            <th class="sortable" onclick="sortTable('title')">Název <span class="sort-arrow"></span></th>
-            <th class="sortable" onclick="sortTable('code')" style="text-align:left">Kód <span class="sort-arrow"></span></th>
-            <th class="sortable" onclick="sortTable('price')">Cena s DPH <span class="sort-arrow"></span></th>
-            <th class="sortable" onclick="sortTable('inStore')">Skladem (ks) <span class="sort-arrow"></span></th>
-            <th class="sortable" onclick="sortTable('stockValue')">Hodnota skladu <span class="sort-arrow"></span></th>
-            <th>Viditelný</th>
-            <th>Stav</th>
+            <th onclick="sortTable(0)" style="text-align:left">Rank <em class="si"></em></th>
+            <th onclick="sortTable(1)" style="text-align:left">Kód <em class="si"></em></th>
+            <th onclick="sortTable(2)" style="text-align:left;min-width:220px">Název <em class="si"></em></th>
+            <th onclick="sortTable(3)">Prodáno ks <em class="si"></em></th>
+            <th onclick="sortTable(4)">Cena Kč <em class="si"></em></th>
+            <th onclick="sortTable(5)">Tržba Kč <em class="si"></em></th>
+            <th onclick="sortTable(6)">Skladem <em class="si"></em></th>
+            <th onclick="sortTable(7)">Viditelný <em class="si"></em></th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
+        <tfoot><tr id="tableFoot"></tr></tfoot>
       </table>
-      <div class="empty-state" id="emptyState" style="display:none">Žádné balíčky neodpovídají filtru.</div>
-    </div>
-  </div>
-
-  <div class="section" id="chart">
-    <div class="section-title">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m6 0h6m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v10m6 0v-4a2 2 0 00-2-2h-2a2 2 0 00-2 2v4"/></svg>
-      Top 15 balíčků dle hodnoty skladu (ks × cena s DPH)
-    </div>
-    <div class="chart-area">
-      <div class="bar-chart-wrapper" id="barChart"></div>
     </div>
   </div>
 </div>
 
 <script>
-const PRODUCTS = [
-  {id:6648,title:"Absolutní pohodlí a ochrana",code:null,visible:false,inStore:0,price:935},
-  {id:6653,title:"Bio Rehab - aktivátor růstu",code:null,visible:true,inStore:925,price:1340},
-  {id:6654,title:"Bio Rehab - aktivátor růstu vlasů",code:"BA451",visible:false,inStore:28,price:1992},
-  {id:6656,title:"Dokonalý úklid bez chemie",code:null,visible:false,inStore:0,price:2530},
-  {id:6658,title:"Královské brožury",code:null,visible:false,inStore:0,price:115},
-  {id:6659,title:"Master Herb - STOPka pro padající vlasy",code:null,visible:false,inStore:73,price:1051},
-  {id:6660,title:"Ovečková řada pro krásnou pleť",code:null,visible:true,inStore:179,price:756},
-  {id:6662,title:"Rybičky - séra pro krásnou pleť",code:null,visible:false,inStore:0,price:1172},
-  {id:6663,title:"Šampon pro hloubkové čistění a kondicionér",code:null,visible:true,inStore:107,price:817},
-  {id:6664,title:"Šampony a balzám pro mastící se vlasy",code:null,visible:false,inStore:81,price:1124},
-  {id:6665,title:"Šampony a balzám pro vlasy s lupy",code:null,visible:false,inStore:107,price:1188},
-  {id:6666,title:"Smíšená pleť",code:null,visible:false,inStore:8,price:2661},
-  {id:6667,title:"Suchá pleť",code:null,visible:false,inStore:0,price:2481},
-  {id:7141,title:"Základní menstruační balíček – Nefritový start",code:"YZ776",visible:true,inStore:892,price:537},
-  {id:7142,title:"Kompletní menstruační péče – Nefritová harmonie",code:"CG170",visible:true,inStore:892,price:929},
-  {id:7143,title:"Balíček pro zralou ženu 50+ Nefritová svěžest",code:"AG295",visible:false,inStore:0,price:1184},
-  {id:7224,title:"Kúra pro prevenci zdraví",code:"DY368",visible:false,inStore:0,price:3250},
-  {id:7225,title:"Revoluce pro omlazenípleti",code:"FP725",visible:true,inStore:64,price:3035},
-  {id:7226,title:"Novinka pro citlivou pleť",code:"FA725",visible:false,inStore:0,price:2962},
-  {id:7227,title:"Stop akné",code:"QV908",visible:false,inStore:38,price:2039},
-  {id:7228,title:"Krásná pleť bez nedokonalostí",code:"ZD676",visible:true,inStore:368,price:2980},
-  {id:7229,title:"Ochrana a výživa přes zimu",code:"WX129",visible:false,inStore:256,price:1692},
-  {id:7230,title:"Okouzlující líčení",code:"TF015",visible:false,inStore:0,price:2299},
-  {id:7231,title:"Ekologická domácnost",code:"BR864",visible:false,inStore:0,price:2345},
-  {id:7232,title:"STOP Padání vlasů",code:"IA574",visible:false,inStore:0,price:1861},
-  {id:7233,title:"Péče o pleť jako ze salonu",code:"LE127",visible:false,inStore:0,price:5158},
-  {id:7234,title:"Zdravé a husté vlasy",code:"UY539",visible:false,inStore:0,price:2150},
-  {id:7235,title:"Luxusní péče o tělo",code:"OA320",visible:true,inStore:65,price:1653},
-  {id:7236,title:"Rekonstrukce poškozených vlasů",code:"CI911",visible:false,inStore:0,price:1326},
-  {id:7237,title:"STOP mastícím se vlasům",code:"PK769",visible:false,inStore:0,price:1701},
-  {id:7238,title:"Zdravé zuby a svěží dech",code:"QV129",visible:false,inStore:0,price:1211},
-  {id:7239,title:"Domácí lékárnička – úleva od bolestí",code:"MY016",visible:false,inStore:0,price:1510},
-  {id:7240,title:"Domácí lékárnička – úleva od nachlazení",code:"UY175",visible:false,inStore:0,price:1597},
-  {id:7241,title:"Relaxační SPA rituál",code:"KQ062",visible:true,inStore:208,price:1430},
-  {id:7242,title:"Domácí lékárnička – radost z pohybu",code:"CD432",visible:false,inStore:0,price:3848},
-  {id:7243,title:"Domácí lékárnička – vždy v kondici",code:"DH975",visible:false,inStore:0,price:2763},
-  {id:7244,title:"Zdravá žena 15+",code:"TF452",visible:true,inStore:312,price:1268},
-  {id:7245,title:"Domácí lékárnička – síla turmalínu",code:"AS010",visible:false,inStore:0,price:4229},
-  {id:7246,title:"Domácí lékárnička – SOS při migréně",code:"BS062",visible:false,inStore:0,price:2181},
-  {id:7247,title:"Očista organismu",code:"OT111",visible:false,inStore:208,price:3217},
-  {id:7248,title:"Plánujeme miminko",code:"AE593",visible:false,inStore:0,price:3048},
-  {id:7249,title:"Věčné mládí pleti",code:"ZW017",visible:false,inStore:0,price:2566},
-  {id:7251,title:"Zdravá žena 45+",code:"JU686",visible:false,inStore:0,price:2692},
-  {id:7252,title:"Pro klouby jako za mlada",code:"FZ019",visible:false,inStore:0,price:2326},
-  {id:7253,title:"Pro aktivní sportovce",code:"WH619",visible:false,inStore:0,price:1136},
-  {id:7254,title:"Speciálně pro muže",code:"EH959",visible:false,inStore:0,price:1727},
-  {id:7283,title:"Bio Rehab – zdravé a silné vlasy bez padání",code:"IA655",visible:false,inStore:0,price:2132},
-  {id:7291,title:"Rozjasněná pleť",code:"WO122",visible:false,inStore:0,price:1078},
-  {id:7298,title:"Pro tatínky, kteří celé dny usilovně pracují",code:"HD784",visible:true,inStore:338,price:2458},
-  {id:7299,title:"Pro maminky, které zapomínají na sebe",code:"TM904",visible:false,inStore:0,price:2294},
-  {id:8130,title:"Kompletní sada pro čistou domácnost",code:"GS162",visible:false,inStore:194,price:2676},
-  {id:8132,title:"Balíček Vitalita v přechodu – přírodní síla pro hormonální pohodu",code:"BE906",visible:false,inStore:448,price:1519},
+const DATA = [
+  {r:1,c:"52902/03",t:"Revitalizační maska na obličej a krk Lingzhi - 3ks",q:603,p:261,rev:157383,s:202,v:true},
+  {r:2,c:"AU572",t:"Revitalizační maska na obličej a krk s fullereny – výhodný balíček dvou masek",q:172,p:88,rev:15136,s:2008,v:true},
+  {r:3,c:"YH247",t:"Kolagenová terapie pro zpevnění a hydrataci pleti",q:92,p:1039,rev:95588,s:423,v:true},
+  {r:4,c:"YD653",t:"Regenerační balíček pro silné vlasy s deodorantem",q:77,p:561,rev:43197,s:601,v:true},
+  {r:5,c:"MF366",t:"Omlazující rituál pro dokonalé kontury obličeje",q:47,p:487,rev:22889,s:89,v:true},
+  {r:6,c:"TW935",t:"Kompletní péče o ruce a nohy s hadím olejem",q:45,p:162,rev:7290,s:2764,v:true},
+  {r:7,c:"JH740",t:"Mořský kolagenový rituál pro vypnutou a zářivou pleť",q:43,p:343,rev:14749,s:450,v:true},
+  {r:8,c:"EK428",t:"Balíček intimního zdraví a přirozené pohody",q:36,p:582,rev:20952,s:640,v:true},
+  {r:9,c:"IC353",t:"Přírodní péče o intimní zdraví ženy",q:27,p:639,rev:17253,s:640,v:true},
+  {r:10,c:"ET013",t:"Kompletní kolagenová péče pro mladistvé kontury",q:26,p:1039,rev:27014,s:423,v:true},
+  {r:11,c:"MY493",t:"Zázvor – přírodní podpora pro celkovou pohodu",q:25,p:121,rev:3025,s:247,v:true},
+  {r:12,c:"CB008",t:"Kompletní hydratační péče pro zářivou pleť",q:25,p:798,rev:19950,s:105,v:true},
+  {r:13,c:"QD143",t:"Hydratační rituál pro tělo a vlasy Oliva a Marakuja",q:24,p:726,rev:17424,s:205,v:true},
+  {r:14,c:"AX000",t:"Podpora pohodlí svalů a kloubů",q:22,p:497,rev:10934,s:715,v:true},
+  {r:15,c:"YG940",t:"Aromatický rituál svěžesti",q:21,p:731,rev:15351,s:161,v:false},
+  {r:16,c:"GD574",t:"Regenerační SPA balíček pro dokonalé ruce a nohy",q:18,p:162,rev:2916,s:2806,v:true},
+  {r:17,c:"PG066",t:"Broskvový rituál pro zářivou pleť",q:18,p:228,rev:4104,s:1169,v:true},
+  {r:18,c:"DB290",t:"Přírodní rovnováha pro aktivní ženu – rozchodnice, bylinné vložky a fytonáplast tianDe",q:17,p:1027,rev:17459,s:2469,v:false},
+  {r:19,c:"OH532",t:"Exfoliovaná a přirozeně zářivá pleť tianDe",q:16,p:686,rev:10976,s:80,v:true},
+  {r:20,c:"PO056",t:"Zářivá a vyhlazená pleť s dárkem",q:15,p:686,rev:10290,s:136,v:true},
+  {r:21,c:"MF192",t:"Balíček Úleva a regenerace",q:14,p:352,rev:4928,s:738,v:true},
+  {r:22,c:"PR437",t:"Hydratační rituál Vodní meloun a Hrozny s dárkem",q:14,p:726,rev:10164,s:214,v:true},
+  {r:23,c:"PX373",t:"Základní balíček k hubnutí TOP produkty",q:12,p:3457,rev:41484,s:142,v:true},
+  {r:24,c:"LV585",t:"Přírodní péče pro tělo i duši",q:12,p:1342,rev:16104,s:339,v:false},
+  {r:25,c:"WX598",t:"Zářivá pokožka, kterou si zamilujete",q:12,p:1342,rev:16104,s:365,v:false},
+  {r:26,c:"ST750",t:"Čistící náplast na nos černé tečky - v akci 3+1",q:11,p:115,rev:1265,s:99,v:true},
+  {r:27,c:"IU320",t:"Bylinný balíček pro vitální imunitu a uvolněné tělo",q:11,p:828,rev:9108,s:245,v:false},
+  {r:28,c:"BC869",t:"Collagen Active – komplexní lifting pro obličej, krk i vaše tělo",q:11,p:2804,rev:30844,s:135,v:true},
+  {r:29,c:"PN436",t:"Fytokorekce problematické pleti",q:10,p:380,rev:3800,s:182,v:true},
+  {r:30,c:"EE147",t:"Úleva a regenerace",q:9,p:737,rev:6633,s:738,v:true},
+  {r:31,c:"DP361",t:"Balíček pro podporu pohyblivosti",q:9,p:1302,rev:11718,s:613,v:true},
+  {r:32,c:"CY150",t:"Kompletní BIO REHAB balíček pro probuzení a posílení vlasů",q:8,p:1341,rev:10728,s:200,v:true},
+  {r:33,c:"NR649",t:"Osvěžující trio pro dokonale čistou pleť",q:8,p:520,rev:4160,s:285,v:true},
+  {r:34,c:"NQ771",t:"Proměna postavy - intenzivní program pro vaše tělo",q:8,p:6813,rev:54504,s:142,v:true},
+  {r:35,c:"OG279",t:"Trio omlazujících masek pro zářivou a vypnutou pleť",q:8,p:571,rev:4568,s:202,v:false},
+  {r:36,c:"6653",t:"Bio Rehab - aktivátor růstu",q:7,p:0,rev:0,s:0,v:false},
+  {r:37,c:"TI076",t:"Rozpustný čakankový nápoj s extraktmi parchy saflorovej a rezavce šikmého 1+1",q:7,p:61,rev:427,s:992,v:false},
+  {r:38,c:"MZ984",t:"Luxusní péče pro hedvábně jemné ruce",q:6,p:177,rev:1062,s:1979,v:false},
+  {r:39,c:"EC212",t:"Péče o pohodlí při pohybu",q:6,p:1236,rev:7416,s:1304,v:true},
+  {r:40,c:"GD409",t:"Kolagenový omlazující rituál pro zralou pleť",q:6,p:1458,rev:8748,s:117,v:true},
+  {r:41,c:"IC931",t:"Rozproudění lymfy",q:6,p:3690,rev:22140,s:18,v:true},
+  {r:42,c:"QF894",t:"Přírodní obnova pleti s tianDe",q:6,p:520,rev:3120,s:285,v:true},
+  {r:43,c:"EE878",t:"Bylinná péče pro tělo v pohybu i klidu",q:6,p:828,rev:4968,s:245,v:false},
+  {r:44,c:"RI073",t:"Intimní péče – balíček od Království tianDe",q:5,p:704,rev:3520,s:1205,v:true},
+  {r:45,c:"TR433",t:"STOP nepohodlí zad a kloubů",q:5,p:618,rev:3090,s:1304,v:true},
+  {r:46,c:"MU915",t:"Bylinná péče zevnitř i zvenčí",q:5,p:1341,rev:6705,s:1064,v:false},
+  {r:47,c:"US098",t:"Komplexní péče o oční okolí",q:5,p:542,rev:2710,s:680,v:false},
+  {r:48,c:"6663",t:"Šampon pro hloubkové čistění a kondicionér",q:4,p:0,rev:0,s:0,v:false},
+  {r:49,c:"YZ776",t:"Základní menstruační balíček - Nefritový start",q:4,p:537,rev:2148,s:885,v:true},
+  {r:50,c:"BC270",t:"Dokonalý úklidový set pro zářivou domácnost",q:4,p:599,rev:2396,s:140,v:false},
+  {r:51,c:"VA991",t:"Vlasová terapie pro husté a zářivé vlasy",q:4,p:2001,rev:8004,s:188,v:true},
+  {r:52,c:"6660",t:"Ovečková řada pro krásnou pleť",q:3,p:0,rev:0,s:0,v:false},
+  {r:53,c:"CG170",t:"Kompletní menstruační péče - Nefritová harmonie",q:3,p:929,rev:2787,s:885,v:true},
+  {r:54,c:"LE742",t:"Balíček pro pocit lehkosti - 2. měsíc",q:3,p:2265,rev:6795,s:39,v:true},
+  {r:55,c:"TV731",t:"Balíček Jemná péče – každodenní intimní komfort",q:3,p:2005,rev:6015,s:446,v:true},
+  {r:56,c:"FE820",t:"Jemná péče – balíček pro každodenní intimní komfort",q:3,p:2390,rev:7170,s:446,v:true},
+  {r:57,c:"GR738",t:"Intimní péče – balíček od Království tianDe",q:3,p:1089,rev:3267,s:1205,v:true},
+  {r:58,c:"XE173",t:"STOP suchým rukám",q:3,p:263,rev:789,s:491,v:true},
+  {r:59,c:"BG076",t:"Elixír mládí se silou peptidů",q:3,p:2822,rev:8466,s:117,v:true},
+  {r:60,c:"OO908",t:"Sada pro problematickou pleť",q:3,p:1536,rev:4608,s:67,v:true},
+  {r:61,c:"ER826",t:"Probuzení pokožky silou oliv a zeleného čaje",q:3,p:1221,rev:3663,s:65,v:true},
+  {r:62,c:"IH618",t:"Sada regeneračních tělových solí",q:3,p:1452,rev:4356,s:207,v:true},
+  {r:63,c:"KK951",t:"Kompletní rituál čisté pleti",q:3,p:520,rev:1560,s:285,v:true},
+  {r:64,c:"TH171",t:"Kompletní rituál pro zářivou pleť",q:3,p:520,rev:1560,s:285,v:true},
+  {r:65,c:"FC361",t:"Liftingová péče",q:2,p:951,rev:1902,s:135,v:true},
+  {r:66,c:"CR455",t:"STOP předčasnému šedivění",q:2,p:1244,rev:2488,s:89,v:true},
+  {r:67,c:"TV498",t:"Svěžest a pohodlí",q:2,p:1119,rev:2238,s:1205,v:true},
+  {r:68,c:"EK360",t:"Balíček Energie života – každodenní intimní péče",q:2,p:2005,rev:4010,s:238,v:true},
+  {r:69,c:"HS846",t:"Prémiová kolagenová kúra pro obnovu pleti",q:2,p:2448,rev:4896,s:117,v:true},
+  {r:70,c:"GL059",t:"Čistá pleť začíná tady",q:2,p:1116,rev:2232,s:122,v:true},
+  {r:71,c:"BP850",t:"STOP pocení a zápachu",q:2,p:828,rev:1656,s:311,v:true},
+  {r:72,c:"TM460",t:"Knihy tianDe: Kompletní návod k úspěšnému podnikání",q:2,p:276,rev:552,s:328,v:true},
+  {r:73,c:"OB737",t:"Balíček pro hebké nohy i ruce",q:2,p:190,rev:380,s:1555,v:false},
+  {r:74,c:"SP045",t:"Kolagenová bomba pro každou příležitost",q:2,p:2135,rev:4270,s:130,v:true},
+  {r:75,c:"YE428",t:"Profesionální péče o zuby a dásně s kartáčkem zdarma",q:2,p:684,rev:1368,s:156,v:false},
+  {r:76,c:"ER058",t:"Krémová banánová polévka se zeleninou - dvojité potěšení",q:2,p:85,rev:170,s:0,v:false},
+  {r:77,c:"SX237",t:"Domácí wellness sada s tělovou solí",q:2,p:1646,rev:3292,s:207,v:true},
+  {r:78,c:"CV648",t:"Přírodní obnova pleti v třech krocích",q:2,p:520,rev:1040,s:285,v:true},
+  {r:79,c:"EO350",t:"Přírodní harmonie v čase menopauzy",q:2,p:2756,rev:5512,s:238,v:false},
+  {r:80,c:"RR717",t:"Bylinná harmonie pro klidnou menopauzu",q:2,p:3180,rev:6360,s:9,v:false},
+  {r:81,c:"BT835",t:"Revitalizace citlivé oblasti očí",q:2,p:808,rev:1616,s:16,v:false},
+  {r:82,c:"AG295",t:"Balíček pro zralou ženu 50+ Nefritová svěžest",q:1,p:1184,rev:1184,s:0,v:false},
+  {r:83,c:"GQ088",t:"Očista pro celé tělo",q:1,p:2179,rev:2179,s:143,v:false},
+  {r:84,c:"XT790",t:"Suché a poškozené vlasy",q:1,p:1283,rev:1283,s:50,v:false},
+  {r:85,c:"ZC831",t:"Lupy a svědící pokožka",q:1,p:1301,rev:1301,s:106,v:true},
+  {r:86,c:"YT328",t:"Balíček pro zdravé vlasy",q:1,p:1347,rev:1347,s:121,v:true},
+  {r:87,c:"EF658",t:"Balíček pro pocit lehkosti – 3. měsíc",q:1,p:2860,rev:2860,s:339,v:true},
+  {r:88,c:"EA248",t:"20-denní detoxikace",q:1,p:4279,rev:4279,s:1,v:false},
+  {r:89,c:"RS525",t:"Pro slečny",q:1,p:725,rev:725,s:583,v:true},
+  {r:90,c:"CJ659",t:"Balíček Menstruace s lehkostí",q:1,p:764,rev:764,s:885,v:true},
+  {r:91,c:"GR258",t:"Balíček Svěžest a pohodlí",q:1,p:734,rev:734,s:1205,v:true},
+  {r:92,c:"PO402",t:"Balíček Harmonizace cyklu",q:1,p:858,rev:858,s:609,v:true},
+  {r:93,c:"PH201",t:"Balíček Úleva přírodní cestou od Království tianDe",q:1,p:951,rev:951,s:885,v:true},
+  {r:94,c:"HU988",t:"Balíček Energie bylin",q:1,p:1315,rev:1315,s:446,v:true},
+  {r:95,c:"AX239",t:"Balíček Křehká intimita",q:1,p:558,rev:558,s:1205,v:true},
+  {r:96,c:"YJ580",t:"Těhotenství v pohodlí",q:1,p:725,rev:725,s:583,v:true},
+  {r:97,c:"GG167",t:"Balíček komfort",q:1,p:1856,rev:1856,s:1122,v:true},
+  {r:98,c:"UE568",t:"Přírodní záchrana pro unavené vlasy",q:1,p:1442,rev:1442,s:106,v:true},
+  {r:99,c:"II461",t:"Mořská síla omlazení s Fucoidanem",q:1,p:2517,rev:2517,s:165,v:true},
+  {r:100,c:"UO321",t:"Přírodní záchrana pro aknózní pleť s Master Herb",q:1,p:2174,rev:2174,s:105,v:true},
+  {r:101,c:"XW035",t:"Kompletní sada proti šedivění Master Herb",q:1,p:1395,rev:1395,s:89,v:true},
+  {r:102,c:"SG886",t:"Regenerační rituál s ovčí placentou",q:1,p:1285,rev:1285,s:150,v:true},
+  {r:103,c:"WQ104",t:"Letní balíček ženského zdraví",q:1,p:946,rev:946,s:0,v:false},
+  {r:104,c:"AE596",t:"Detoxikační balíček pro nohy s bylinným bonusem",q:1,p:2356,rev:2356,s:1656,v:false},
+  {r:105,c:"OS391",t:"STOP pigmentovým skvrnám",q:1,p:695,rev:695,s:125,v:true},
+  {r:106,c:"DO281",t:"STOP vráskám",q:1,p:1631,rev:1631,s:130,v:true},
+  {r:107,c:"HC430",t:"STOP mastné pleti",q:1,p:1395,rev:1395,s:165,v:true},
+  {r:108,c:"ZU217",t:"STOP suché pleti",q:1,p:856,rev:856,s:256,v:true},
+  {r:109,c:"HD366",t:"STOP oteklým a unaveným nohám",q:1,p:1062,rev:1062,s:207,v:true},
+  {r:110,c:"ZG095",t:"Balíček Aktivní pohyb",q:1,p:435,rev:435,s:1304,v:false},
+  {r:111,c:"WX271",t:"Baťova moudrost pro dva",q:1,p:409,rev:409,s:107,v:true},
+  {r:112,c:"UW896",t:"Oční gel na vrásky z hadího tuku 1+1",q:1,p:347,rev:347,s:410,v:false},
+  {r:113,c:"LL302",t:"Kompletní antioxidační očista a regenerace",q:1,p:507,rev:507,s:0,v:false},
+  {r:114,c:"AH767",t:"Kompletní omlazující péče o oční okolí s hyaluronovým bonusem",q:1,p:686,rev:686,s:288,v:false},
+  {r:115,c:"SC473",t:"Trio pleťových masek pro dokonalou hydrataci a omlazení",q:1,p:175,rev:175,s:890,v:false},
+  {r:116,c:"JM413",t:"Sada pro dokonale zdravou pleť bez nedokonalostí",q:1,p:1417,rev:1417,s:38,v:true},
+  {r:117,c:"WG327",t:'Balíček "Znovuzrození vlasů"',q:1,p:1141,rev:1141,s:136,v:true},
+  {r:118,c:"BE906",t:"Balíček Vitalita v přechodu - přírodní síla pro hormonální pohodu",q:1,p:1519,rev:1519,s:446,v:false},
+  {r:119,c:"UH183",t:"Přírodní rituál pro zdravé vlasy",q:1,p:829,rev:829,s:80,v:false},
+  {r:120,c:"BC836",t:"Revitalizační balíček Lingzhi pro mladistvou pleť",q:1,p:262,rev:262,s:16,v:false},
+  {r:121,c:"CR502",t:"Dokonalá čistota domácnosti s aktivním kyslíkem",q:1,p:686,rev:686,s:140,v:false},
+  {r:122,c:"AT336",t:"Omlazující kolagenový set pro intenzivní lifting",q:1,p:205,rev:205,s:231,v:false},
+  {r:123,c:"XJ241",t:"Detoxikační balíček pro dokonalé křivky",q:1,p:631,rev:631,s:18,v:false},
+  {r:124,c:"QZ359",t:"Komplexní tělová péče pro dokonalé křivky",q:1,p:631,rev:631,s:18,v:false},
+  {r:125,c:"LI434",t:"Komplexní balíček Zdravé dýchání",q:1,p:1421,rev:1421,s:151,v:true},
+  {r:126,c:"BB576",t:"Balíček Síla přírody pro vaše zdraví",q:1,p:2569,rev:2569,s:161,v:false},
+  {r:127,c:"KR936",t:"Kompletní SPA péče pro krásné a hebké ruce",q:1,p:980,rev:980,s:337,v:true},
+  {r:128,c:"KC171",t:"Přírodní rovnováha pro ženu v menopauze",q:1,p:3215,rev:3215,s:329,v:false},
+  {r:129,c:"QR071",t:"Hadí duo pro hebké a lesklé vlasy",q:1,p:707,rev:707,s:136,v:false}
 ];
 
-PRODUCTS.forEach(p => { p.stockValue = p.inStore * p.price; });
+const TOTAL_QTY = 1733;
 
-// KPI
-const total = PRODUCTS.length;
-const active = PRODUCTS.filter(p => p.visible).length;
-const hidden = total - active;
-const totalStockVal = PRODUCTS.reduce((s, p) => s + p.stockValue, 0);
-const totalStockKs = PRODUCTS.reduce((s, p) => s + p.inStore, 0);
-const instockCount = PRODUCTS.filter(p => p.inStore > 0).length;
+function f(n){ return n.toLocaleString('cs-CZ'); }
 
-document.getElementById('kpi-total').textContent = total;
-document.getElementById('kpi-active').textContent = active;
-document.getElementById('kpi-active-pct').textContent = Math.round(active/total*100) + ' % z nabídky';
-document.getElementById('kpi-hidden').textContent = hidden;
-document.getElementById('kpi-hidden-pct').textContent = Math.round(hidden/total*100) + ' % z nabídky';
-document.getElementById('kpi-stock-value').textContent = fmtMil(totalStockVal);
-document.getElementById('kpi-stock-ks').textContent = totalStockKs.toLocaleString('cs') + ' ks celkem';
-document.getElementById('kpi-instock-count').textContent = instockCount;
-
-function fmtMil(v) {
-  if (v >= 1e6) return (v/1e6).toLocaleString('cs-CZ',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' mil. Kč';
-  return fmtCzk(v);
+// Theme
+function toggleTheme(){
+  const d = document.documentElement;
+  const isDark = d.getAttribute('data-theme') === 'dark';
+  d.setAttribute('data-theme', isDark ? '' : 'dark');
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
 }
-function fmtCzk(v) {
-  return v.toLocaleString('cs-CZ',{minimumFractionDigits:0,maximumFractionDigits:0}) + ' Kč';
-}
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+(function(){ if(localStorage.getItem('theme')==='dark') document.documentElement.setAttribute('data-theme','dark'); })();
 
-// TABLE
-let sortKey = 'stockValue', sortDir = -1;
-let filtered = [...PRODUCTS];
-
-function stockBadge(n) {
-  if (n === 0) return '<span class="badge stock-out">Vyprodáno</span>';
-  if (n < 50) return '<span class="badge stock-low">Nízký sklad</span>';
-  return '<span class="badge stock-ok">Na skladě</span>';
+// Sidebar
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
 }
 
-function renderTable() {
-  const tbody = document.getElementById('tableBody');
-  const empty = document.getElementById('emptyState');
-  document.getElementById('filterCount').textContent = 'Zobrazeno: ' + filtered.length + ' / ' + total;
-  if (!filtered.length) { tbody.innerHTML = ''; empty.style.display = ''; return; }
-  empty.style.display = 'none';
-  tbody.innerHTML = filtered.map(p => `
-    <tr>
-      <td>${esc(p.title)}</td>
-      <td class="code-cell">${p.code ? `<code style="font-size:11.5px;background:var(--bg);padding:2px 7px;border-radius:4px;font-family:monospace">${p.code}</code>` : '<span style="color:var(--text-muted);font-size:12px">—</span>'}</td>
-      <td>${p.price.toLocaleString('cs-CZ')} Kč</td>
-      <td>${p.inStore.toLocaleString('cs-CZ')}</td>
-      <td>${p.stockValue > 0 ? fmtCzk(p.stockValue) : '<span style="color:var(--text-muted)">—</span>'}</td>
-      <td>${p.visible ? '<span class="badge vis-yes">Ano</span>' : '<span class="badge vis-no">Ne</span>'}</td>
-      <td>${stockBadge(p.inStore)}</td>
-    </tr>
-  `).join('');
-}
-
-function applyFilters() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const vis = document.getElementById('visFilter').value;
-  const stock = document.getElementById('stockFilter').value;
-  filtered = PRODUCTS.filter(p => {
-    if (q && !(p.title + ' ' + (p.code||'')).toLowerCase().includes(q)) return false;
-    if (vis === 'true' && !p.visible) return false;
-    if (vis === 'false' && p.visible) return false;
-    if (stock === 'instock' && p.inStore === 0) return false;
-    if (stock === 'outstock' && p.inStore > 0) return false;
-    if (stock === 'low' && !(p.inStore > 0 && p.inStore < 50)) return false;
-    return true;
-  });
-  doSort();
-  renderTable();
-}
-
-function sortTable(key) {
-  const ths = document.querySelectorAll('.data-table thead th');
-  ths.forEach(th => th.classList.remove('sort-asc','sort-desc'));
-  if (sortKey === key) sortDir *= -1;
-  else { sortKey = key; sortDir = (key === 'title' || key === 'code') ? 1 : -1; }
-  const keyIdx = {title:0,code:1,price:2,inStore:3,stockValue:4};
-  if (keyIdx[key] !== undefined) ths[keyIdx[key]].classList.add(sortDir===1?'sort-asc':'sort-desc');
-  doSort(); renderTable();
-}
-
-function doSort() {
-  filtered.sort((a,b) => {
-    let va = a[sortKey] ?? '', vb = b[sortKey] ?? '';
-    return typeof va === 'string' ? va.localeCompare(vb,'cs') * sortDir : (va - vb) * sortDir;
-  });
-}
-
-doSort(); renderTable();
-
-// Set initial sort indicator
-document.querySelectorAll('.data-table thead th')[4].classList.add('sort-desc');
-
-// BAR CHART
-function renderBarChart() {
-  const top = [...PRODUCTS].filter(p=>p.stockValue>0).sort((a,b)=>b.stockValue-a.stockValue).slice(0,15);
-  const maxV = top[0].stockValue;
-  document.getElementById('barChart').innerHTML = top.map(p => {
-    const pct = Math.max(2, Math.round(p.stockValue/maxV*100));
-    const lbl = pct > 28 ? fmtCzk(p.stockValue) : '';
-    const name = p.title.length > 38 ? p.title.slice(0,37)+'…' : p.title;
-    return `<div class="bar-row">
-      <div class="bar-name" title="${esc(p.title)}">${esc(name)}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${pct}%">${lbl}</div></div>
-      <div class="bar-val">${fmtCzk(p.stockValue)}</div>
+// TOP 20 BAR
+(function(){
+  const top20 = DATA.slice(0,20);
+  const mx = top20[0].q;
+  document.getElementById('barChart').innerHTML = top20.map((d,i)=>{
+    const pct = (d.q/mx*100).toFixed(1);
+    const acc = i<3 ? ' accent' : '';
+    return `<div class="bar-item">
+      <div class="bar-rank">#${d.r}</div>
+      <div class="bar-label-name" title="${d.t}">${d.c} — ${d.t}</div>
+      <div class="bar-track"><div class="bar-fill${acc}" style="width:${pct}%">${d.q} ks</div></div>
     </div>`;
   }).join('');
-}
-renderBarChart();
+})();
 
-// THEME
-function toggleTheme() {
-  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.documentElement.setAttribute('data-theme', dark ? '' : 'dark');
-  localStorage.setItem('theme', dark ? '' : 'dark');
-}
-(function(){ const t=localStorage.getItem('theme'); if(t) document.documentElement.setAttribute('data-theme',t); })();
-
-// SIDEBAR
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.querySelector('.overlay').classList.toggle('show');
-}
-
-// SCROLL SPY
-const navLinks = document.querySelectorAll('.sidebar-nav a');
-window.addEventListener('scroll', () => {
-  let cur = 'kpi';
-  ['kpi','catalog','chart'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && window.scrollY >= el.offsetTop - 120) cur = id;
+// DONUT
+(function(){
+  const top10q = DATA.slice(0,10).reduce((s,d)=>s+d.q,0);
+  const rest = TOTAL_QTY - top10q;
+  const colors = ['#5C2450','#7a3a6c','#9b5c8c','#b87caa','#d4a4c8','#e6a817','#f0c05a','#52b788','#2d6a4f','#1a4a2e'];
+  const segs = DATA.slice(0,10).map((d,i)=>({lbl:d.c,val:d.q,col:colors[i]}));
+  segs.push({lbl:'Ostatní (119)',val:rest,col:'#cbd5e1'});
+  const cx=100,cy=100,R=75,hole=38;
+  let a = -Math.PI/2, paths='';
+  function pt(ang,r){ return [cx+r*Math.cos(ang), cy+r*Math.sin(ang)]; }
+  segs.forEach(seg=>{
+    const da = seg.val/TOTAL_QTY*2*Math.PI;
+    const ea = a+da, la = da>Math.PI?1:0;
+    const [x1,y1]=pt(a,R),[x2,y2]=pt(ea,R),[x3,y3]=pt(ea,hole),[x4,y4]=pt(a,hole);
+    paths += `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} A${R},${R} 0 ${la},1 ${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)} A${hole},${hole} 0 ${la},0 ${x4.toFixed(1)},${y4.toFixed(1)} Z" fill="${seg.col}" stroke="var(--card)" stroke-width="1.5"/>`;
+    a = ea;
   });
-  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+cur));
-}, {passive:true});
+  paths += `<text x="${cx}" y="${cy-7}" text-anchor="middle" font-size="16" font-weight="800" fill="var(--text)">${f(TOTAL_QTY)}</text>`;
+  paths += `<text x="${cx}" y="${cy+11}" text-anchor="middle" font-size="9" fill="var(--text-muted)">celkem ks</text>`;
+  document.getElementById('donutSvg').innerHTML = paths;
+  document.getElementById('donutStats').innerHTML = segs.map(s=>
+    `<div class="donut-stat"><div class="donut-stat-left"><div class="dot" style="background:${s.col}"></div>${s.lbl}</div><div class="donut-stat-right">${f(s.val)} ks</div></div>`
+  ).join('');
+})();
+
+// REVENUE CHART
+(function(){
+  const top10 = DATA.slice().sort((a,b)=>b.rev-a.rev).slice(0,10);
+  const mx = top10[0].rev;
+  document.getElementById('revChart').innerHTML = top10.map(d=>{
+    const pct = (d.rev/mx*100).toFixed(1);
+    return `<div class="bar-item">
+      <div class="bar-rank">#${d.r}</div>
+      <div class="bar-label-name" style="width:190px" title="${d.t}">${d.c}</div>
+      <div class="bar-track"><div class="bar-fill accent" style="width:${pct}%">${f(d.rev)} Kč</div></div>
+    </div>`;
+  }).join('');
+})();
+
+// TABLE
+let filtered = [...DATA], sortCol=0, sortDir=1;
+function renderTable(){
+  const mx = DATA[0].q;
+  document.getElementById('tableBody').innerHTML = filtered.map(d=>{
+    const mp = Math.round(d.q/mx*100);
+    const badge = d.v ? '<span class="badge badge-yes">Ano</span>' : '<span class="badge badge-no">Ne</span>';
+    const rc = d.r<=3?'t3':'';
+    return `<tr>
+      <td><span class="rb ${rc}">${d.r}</span></td>
+      <td style="text-align:left"><strong>${d.c}</strong></td>
+      <td class="nc">${d.t}</td>
+      <td>${d.q}<span class="mbt"><span class="mbf" style="width:${mp}%"></span></span></td>
+      <td>${d.p>0?f(d.p)+' Kč':'—'}</td>
+      <td>${d.rev>0?f(d.rev)+' Kč':'—'}</td>
+      <td>${d.s>0?f(d.s):'<span style="color:var(--danger)">0</span>'}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+  const tq = filtered.reduce((s,d)=>s+d.q,0);
+  const tr = filtered.reduce((s,d)=>s+d.rev,0);
+  document.getElementById('tableFoot').innerHTML = `<td>Celkem (${filtered.length} balíčků)</td><td></td><td></td><td>${f(tq)} ks</td><td>—</td><td>${f(tr)} Kč</td><td>—</td><td>—</td>`;
+  document.getElementById('tableInfo').textContent = `Zobrazeno: ${filtered.length} / 129`;
+}
+function applySort(){
+  const keys=['r','c','t','q','p','rev','s','v'];
+  const k = keys[sortCol];
+  filtered.sort((a,b)=>{
+    let av=a[k],bv=b[k];
+    if(typeof av==='string') return sortDir*av.localeCompare(bv,'cs');
+    if(typeof av==='boolean') return sortDir*(Number(av)-Number(bv));
+    return sortDir*(av-bv);
+  });
+}
+function filterTable(){
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  const vis = document.getElementById('visFilter').value;
+  filtered = DATA.filter(d=>{
+    const mq = !q || d.c.toLowerCase().includes(q) || d.t.toLowerCase().includes(q);
+    const mv = !vis || (vis==='ano'?d.v:!d.v);
+    return mq && mv;
+  });
+  applySort(); renderTable();
+}
+function sortTable(col){
+  if(sortCol===col){ sortDir*=-1; } else { sortCol=col; sortDir=col===0?1:-1; }
+  document.querySelectorAll('.data-table thead th').forEach((th,i)=>{
+    th.classList.remove('sa','sd');
+    if(i===sortCol) th.classList.add(sortDir===1?'sa':'sd');
+  });
+  applySort(); renderTable();
+}
+filterTable();
+
+// Scroll nav
+window.addEventListener('scroll',()=>{
+  const y = window.scrollY+120;
+  ['kpi','top20','donut','table'].forEach(id=>{
+    const el=document.getElementById(id);
+    const lk=document.querySelector(`.sidebar-nav a[href="#${id}"]`);
+    if(!el||!lk) return;
+    if(y>=el.offsetTop && y<el.offsetTop+el.offsetHeight){
+      document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+      lk.classList.add('active');
+    }
+  });
+},{passive:true});
 </script>
 </body>
 </html>
