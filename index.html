@@ -1,615 +1,243 @@
 <!DOCTYPE html>
-<html lang="cs">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prodej akčních balíčků — Diamond Plus</title>
+<html lang="cs"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prodej balíčků — Diamond Plus</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --brand: #5C2450;
-  --brand-light: #7a3a6c;
-  --brand-dark: #3e1836;
-  --accent: #e6a817;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --bg: #f4f5f7;
-  --card: #ffffff;
-  --text: #1e1e2f;
-  --text-muted: #6b7280;
-  --border: #e5e7eb;
-  --sidebar-w: 260px;
-  --radius: 12px;
-}
-[data-theme="dark"] {
-  --bg: #0f1117;
-  --card: #1a1c25;
-  --text: #e4e4e7;
-  --text-muted: #9ca3af;
-  --border: #2d2f3a;
-  --brand-light: #9b6490;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; overflow-x: hidden; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  min-height: 100vh;
-  display: flex;
-  overflow-x: hidden;
-}
-.sidebar {
-  width: var(--sidebar-w);
-  background: linear-gradient(180deg, var(--brand-dark) 0%, var(--brand) 100%);
-  color: #fff;
-  position: fixed;
-  top: 0; left: 0;
-  height: 100vh;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  transition: transform .3s ease;
-  overflow-y: auto;
-}
-.sidebar-logo { padding: 28px 24px 20px; border-bottom: 1px solid rgba(255,255,255,.12); }
-.sidebar-logo h2 { font-size: 16px; font-weight: 700; letter-spacing: .5px; }
-.sidebar-logo span { font-size: 11px; opacity: .65; display: block; margin-top: 2px; }
-.sidebar-reports { padding: 14px 0 0; }
-.sidebar-reports a {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 24px;
-  color: rgba(255,255,255,.7);
-  text-decoration: none;
-  font-size: 12.5px; font-weight: 500;
-  border-left: 3px solid transparent;
-  transition: all .2s;
-}
-.sidebar-reports a:hover { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--accent); }
-.sidebar-reports a.report-active { background: rgba(255,255,255,.12); color: #fff; border-left-color: var(--accent); }
-.sidebar-reports a .report-emoji { font-size: 15px; flex-shrink: 0; width: 18px; text-align: center; }
-.sidebar-divider { height: 1px; background: rgba(255,255,255,.12); margin: 10px 24px; }
-.sidebar-nav { padding: 4px 0; flex: 1; }
-.sidebar-nav a {
-  display: flex; align-items: center; gap: 12px;
-  padding: 11px 24px;
-  color: rgba(255,255,255,.75);
-  text-decoration: none;
-  font-size: 13.5px; font-weight: 500;
-  border-left: 3px solid transparent;
-  transition: all .2s;
-}
-.sidebar-nav a:hover, .sidebar-nav a.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--accent); }
-.sidebar-nav a svg { width: 18px; height: 18px; flex-shrink: 0; }
-.sidebar-footer { padding: 18px 24px; border-top: 1px solid rgba(255,255,255,.12); font-size: 11px; opacity: .5; }
-.hamburger {
-  display: none; position: fixed; top: 14px; left: 14px; z-index: 200;
-  background: var(--brand); border: none; color: #fff;
-  width: 42px; height: 42px; border-radius: 10px; cursor: pointer;
-  align-items: center; justify-content: center;
-  box-shadow: 0 2px 12px rgba(0,0,0,.25);
-}
-.hamburger svg { width: 22px; height: 22px; }
-.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 90; }
-.main { flex: 1; margin-left: var(--sidebar-w); padding: 32px 40px; max-width: calc(100vw - 260px); overflow-x: hidden; }
-.header { margin-bottom: 32px; }
-.header h1 { font-size: 26px; font-weight: 700; color: var(--brand); }
-[data-theme="dark"] .header h1 { color: var(--brand-light); }
-.header .period { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
-.header-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
-.theme-toggle {
-  background: var(--card); border: 1px solid var(--border); color: var(--text);
-  padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px;
-  display: flex; align-items: center; gap: 6px;
-}
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 32px; }
-.kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; position: relative; overflow: hidden; }
-.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
-.kpi-card.purple::before { background: var(--brand); }
-.kpi-card.gold::before { background: var(--accent); }
-.kpi-card.red::before { background: var(--danger); }
-.kpi-card.green::before { background: var(--success); }
-.kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .7px; font-weight: 600; }
-.kpi-value { font-size: 32px; font-weight: 800; margin: 6px 0 2px; }
-.kpi-sub { font-size: 12.5px; color: var(--text-muted); }
-.section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 24px; }
-.section-title { font-size: 17px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-.section-title svg { width: 20px; height: 20px; color: var(--brand); flex-shrink: 0; }
-[data-theme="dark"] .section-title svg { color: var(--brand-light); }
-.bar-item { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
-.bar-rank { width: 26px; text-align: right; font-size: 12px; color: var(--text-muted); font-weight: 600; flex-shrink: 0; }
-.bar-label-name { width: 300px; flex-shrink: 0; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
-.bar-track { flex: 1; height: 24px; background: var(--border); border-radius: 6px; overflow: hidden; min-width: 80px; }
-.bar-fill {
-  height: 100%; border-radius: 6px;
-  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-light) 100%);
-  display: flex; align-items: center; padding-left: 8px;
-  color: #fff; font-size: 11px; font-weight: 700;
-  transition: width .6s ease; min-width: 36px; white-space: nowrap;
-}
-.bar-fill.accent { background: linear-gradient(90deg, var(--accent) 0%, #f5c842 100%); color: #333; }
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.donut-wrapper { display: flex; align-items: center; justify-content: center; gap: 36px; flex-wrap: wrap; }
-.donut-stats { min-width: 160px; }
-.donut-stat { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
-.donut-stat:last-child { border-bottom: none; }
-.donut-stat .dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; flex-shrink: 0; }
-.donut-stat-left { display: flex; align-items: center; }
-.donut-stat-right { font-weight: 700; }
-.table-controls { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-.search-box { flex: 1; min-width: 200px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 13.5px; outline: none; }
-.search-box:focus { border-color: var(--brand-light); }
-.filter-select { padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 13.5px; cursor: pointer; outline: none; }
-.table-info { font-size: 13px; color: var(--text-muted); }
-.table-wrap { overflow-x: auto; }
-.data-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
-.data-table thead th {
-  background: var(--brand); color: #fff;
-  padding: 11px 14px; text-align: right;
-  font-weight: 600; font-size: 12px; letter-spacing: .3px;
-  white-space: nowrap; cursor: pointer; user-select: none;
-}
-.data-table thead th:first-child { text-align: left; border-radius: 8px 0 0 0; }
-.data-table thead th:last-child { border-radius: 0 8px 0 0; }
-.data-table thead th:hover { background: var(--brand-light); }
-.data-table thead th .si { margin-left: 4px; opacity: .4; }
-.data-table thead th.sa .si::after { content: ' ↑'; opacity: 1; }
-.data-table thead th.sd .si::after { content: ' ↓'; opacity: 1; }
-.data-table tbody td { padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--border); vertical-align: middle; }
-.data-table tbody td:first-child { text-align: left; }
-.data-table tbody td.nc { max-width: 280px; text-align: left; }
-.data-table tbody tr:hover { background: rgba(92,36,80,.04); }
-[data-theme="dark"] .data-table tbody tr:hover { background: rgba(155,100,144,.08); }
-.data-table tfoot td { font-weight: 700; padding: 11px 14px; text-align: right; background: rgba(92,36,80,.06); border-top: 2px solid var(--brand); }
-.data-table tfoot td:first-child { text-align: left; }
-[data-theme="dark"] .data-table tfoot td { background: rgba(155,100,144,.1); }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
-.badge-yes { background: #dcfce7; color: #15803d; }
-.badge-no { background: #fee2e2; color: #b91c1c; }
-[data-theme="dark"] .badge-yes { background: #14532d; color: #4ade80; }
-[data-theme="dark"] .badge-no { background: #450a0a; color: #f87171; }
-.rb { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-size: 12px; font-weight: 800; background: var(--brand); color: #fff; flex-shrink: 0; }
-.rb.t3 { background: var(--accent); color: #333; }
-.mbt { display: inline-block; width: 60px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; vertical-align: middle; margin-left: 6px; }
-.mbf { height: 100%; border-radius: 3px; background: var(--brand); }
-@media (max-width: 900px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .hamburger { display: flex; }
-  .overlay.show { display: block; }
-  .main { margin-left: 0; padding: 24px 18px; padding-top: 68px; max-width: 100vw; }
-  .two-col { grid-template-columns: 1fr; }
-  .bar-label-name { width: 160px; }
-}
-@media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
-@media print {
-  .sidebar, .hamburger, .overlay, .theme-toggle { display: none !important; }
-  .main { margin-left: 0; padding: 20px; max-width: 100vw; }
-  .section { break-inside: avoid; }
-}
-</style>
-</head>
-<body>
-
-<button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
-  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-</button>
-<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
-    <h2>DIAMOND PLUS</h2>
-    <span>Království TianDe</span>
-  </div>
-  <nav class="sidebar-reports">
-    <a href="https://rkonfal.github.io/diamond-plus-portal/"><span class="report-emoji">🏠</span> Portál</a>
-    <a href="https://rkonfal.github.io/diamond-plus-report/"><span class="report-emoji">💰</span> Hospodaření</a>
-    <a href="https://rkonfal.github.io/4px-obalovy-material/"><span class="report-emoji">📦</span> Obaly</a>
-    <a href="https://rkonfal.github.io/4px-kpi-dashboard/"><span class="report-emoji">📊</span> Expedice</a>
-    <a href="https://rkonfal.github.io/4px-carriers/"><span class="report-emoji">🚚</span> Přepravci</a>
-    <a href="https://rkonfal.github.io/eshop-dashboard/"><span class="report-emoji">🛒</span> E-shop</a>
-    <a href="https://rkonfal.github.io/inventory-dashboard/"><span class="report-emoji">📋</span> Sklad</a>
-    <a href="#" class="report-active"><span class="report-emoji">🎁</span> Balíčky</a>
-  </nav>
-  <div class="sidebar-divider"></div>
-  <nav class="sidebar-nav">
-    <a href="#kpi" class="active">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
-      Přehled
-    </a>
-    <a href="#top20">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m6 0h6m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v10m6 0v-4a2 2 0 00-2-2h-2a2 2 0 00-2 2v4"/></svg>
-      TOP 20 balíčků
-    </a>
-    <a href="#donut">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10"/></svg>
-      Rozdělení &amp; Tržby
-    </a>
-    <a href="#table">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
-      Všechny balíčky
-    </a>
-  </nav>
-  <div class="sidebar-footer">
-    Sestava k 06.04.2026<br>
-    WPJ Shop · Diamond Plus
-  </div>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--brand:#5C2450;--bg:#F1F5F9;--surface:#fff;--text:#0F172A;--sub:#64748B;--border:#E2E8F0;--r:12px}
+[data-theme=dark]{--bg:#0F172A;--surface:#1E293B;--text:#F1F5F9;--sub:#94A3B8;--border:#334155}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex}
+.sidebar{width:260px;min-height:100vh;background:linear-gradient(180deg,#3D1535,var(--brand));padding:20px 0;position:fixed;z-index:100}
+.sidebar-logo{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:12px}
+.sidebar-logo h2{color:#fff;font-size:16px}.sidebar-logo span{color:rgba(255,255,255,.5);font-size:11px}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;transition:.2s}
+.sidebar a:hover,.sidebar a.active{color:#fff;background:rgba(255,255,255,.1)}
+.sidebar a.active{border-left:3px solid #F59E0B}
+.sidebar .divider{border-top:1px solid rgba(255,255,255,.1);margin:12px 20px}
+.main{margin-left:260px;padding:32px;max-width:calc(100vw - 260px);overflow-x:hidden}
+h1{font-size:26px;font-weight:700;margin-bottom:4px}
+.sub{color:var(--sub);font-size:13px;margin-bottom:24px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;border-left:4px solid var(--brand)}
+.kpi.g{border-left-color:#10B981}.kpi.y{border-left-color:#F59E0B}.kpi.b{border-left-color:#6366F1}
+.kpi-l{font-size:11px;text-transform:uppercase;color:var(--sub);font-weight:600;letter-spacing:.5px}
+.kpi-v{font-size:28px;font-weight:700;margin:6px 0}.kpi-n{font-size:12px;color:var(--sub)}
+.sec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:24px}
+.sec h2{font-size:18px;font-weight:700;margin-bottom:16px}
+.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filters input{padding:8px 14px;border:1px solid var(--border);border-radius:20px;background:var(--surface);color:var(--text);font-size:13px;width:250px;font-family:inherit}
+.filters button{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:var(--surface);color:var(--sub);font-size:12px;cursor:pointer;font-family:inherit;font-weight:500}
+.filters button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg);padding:10px 12px;text-align:left;font-weight:600;color:var(--sub);cursor:pointer;border-bottom:2px solid var(--border)}
+th:hover{color:var(--brand)}td{padding:10px 12px;border-bottom:1px solid var(--border)}
+tr:hover td{background:rgba(92,36,80,.03)}
+.ham{display:none;position:fixed;top:12px;left:12px;z-index:200;width:40px;height:40px;border-radius:10px;border:none;background:var(--brand);color:#fff;font-size:20px;cursor:pointer}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.ov.open{display:block}.ham{display:flex;align-items:center;justify-content:center}.main{margin-left:0;padding:16px;max-width:100vw;padding-top:60px}}
+.dm{position:fixed;bottom:20px;right:20px;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:20px;z-index:50}
+.pages{display:flex;gap:6px;margin-top:12px;justify-content:center;flex-wrap:wrap}
+.pages button{width:32px;height:32px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;font-size:12px;font-family:inherit}
+.pages button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+</style></head><body>
+<button class="ham" onclick="document.querySelector('.sidebar').classList.toggle('open');document.querySelector('.ov').classList.toggle('open')">☰</button>
+<div class="ov" onclick="document.querySelector('.sidebar').classList.remove('open');this.classList.remove('open')"></div>
+<aside class="sidebar">
+<div class="sidebar-logo"><h2>DIAMOND PLUS</h2><span>Království TianDe</span></div>
+<a href="https://rkonfal.github.io/diamond-plus-portal/">🏠 Portál</a>
+<a href="https://rkonfal.github.io/diamond-plus-report/">💰 Hospodaření</a>
+<a href="https://rkonfal.github.io/4px-obalovy-material/">📦 Obaly</a>
+<a href="https://rkonfal.github.io/4px-kpi-dashboard/">📊 Expedice</a>
+<a href="https://rkonfal.github.io/4px-carriers/">🚚 Přepravci</a>
+<a href="https://rkonfal.github.io/eshop-dashboard/">🛒 E-shop</a>
+<a href="https://rkonfal.github.io/inventory-dashboard/">📋 Sklad</a>
+<a href="https://rkonfal.github.io/balicky-dashboard/" class="active">📦 Balíčky</a>
+<a href="https://rkonfal.github.io/skupiny-dashboard/">👥 Skupiny</a>
+<a href="https://rkonfal.github.io/expirace-dashboard/">⏰ Expirace</a>
+<div class="divider"></div>
+<a href="#top20">🏆 TOP 20</a>
+<a href="#tabulka">📋 Tabulka</a>
 </aside>
-
-<div class="main">
-  <div class="header" id="kpi">
-    <div class="header-row">
-      <div>
-        <h1>Prodej akčních balíčků — Diamond Plus</h1>
-        <div class="period">Sestava k 06.04.2026 &nbsp;|&nbsp; 129 balíčků &nbsp;|&nbsp; Zdroj: WPJ Shop</div>
-      </div>
-      <button class="theme-toggle" onclick="toggleTheme()">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-        Tmavý režim
-      </button>
-    </div>
-  </div>
-
-  <div class="kpi-grid">
-    <div class="kpi-card purple">
-      <div class="kpi-label">Celkem prodáno kusů</div>
-      <div class="kpi-value">1 733</div>
-      <div class="kpi-sub">ze 129 unikátních balíčků</div>
-    </div>
-    <div class="kpi-card gold">
-      <div class="kpi-label">Počet balíčků</div>
-      <div class="kpi-value">129</div>
-      <div class="kpi-sub">unikátních produktů v sestavě</div>
-    </div>
-    <div class="kpi-card green">
-      <div class="kpi-label">Odhadovaná tržba</div>
-      <div class="kpi-value">990 tis.</div>
-      <div class="kpi-sub">990 909 Kč (qty × cena s DPH)</div>
-    </div>
-    <div class="kpi-card red">
-      <div class="kpi-label">TOP balíček</div>
-      <div class="kpi-value" style="font-size:18px;line-height:1.3">52902/03</div>
-      <div class="kpi-sub">Lingzhi maska — 603 ks (35 % prodeje)</div>
-    </div>
-  </div>
-
-  <div class="section" id="top20">
-    <div class="section-title">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m6 0h6m-6 0V9a2 2 0 012-2h2a2 2 0 012 2v10m6 0v-4a2 2 0 00-2-2h-2a2 2 0 00-2 2v4"/></svg>
-      TOP 20 balíčků podle počtu prodaných kusů
-    </div>
-    <div id="barChart"></div>
-  </div>
-
-  <div class="two-col" id="donut">
-    <div class="section">
-      <div class="section-title">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10"/></svg>
-        TOP 10 vs zbytek (ks)
-      </div>
-      <div class="donut-wrapper">
-        <svg id="donutSvg" viewBox="0 0 200 200" width="180" height="180"></svg>
-        <div class="donut-stats" id="donutStats"></div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="section-title">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 12v-2"/></svg>
-        TOP 10 podle odhadované tržby
-      </div>
-      <div id="revChart"></div>
-    </div>
-  </div>
-
-  <div class="section" id="table">
-    <div class="section-title">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
-      Všechny balíčky — 129 produktů
-    </div>
-    <div class="table-controls">
-      <input type="text" class="search-box" id="searchBox" placeholder="Hledat podle kódu nebo názvu…" oninput="filterTable()">
-      <select class="filter-select" id="visFilter" onchange="filterTable()">
-        <option value="">Všechny (viditelnost)</option>
-        <option value="ano">Viditelné (Ano)</option>
-        <option value="ne">Skryté (Ne)</option>
-      </select>
-      <span class="table-info" id="tableInfo"></span>
-    </div>
-    <div class="table-wrap">
-      <table class="data-table" id="mainTable">
-        <thead>
-          <tr>
-            <th onclick="sortTable(0)" style="text-align:left">Rank <em class="si"></em></th>
-            <th onclick="sortTable(1)" style="text-align:left">Kód <em class="si"></em></th>
-            <th onclick="sortTable(2)" style="text-align:left;min-width:220px">Název <em class="si"></em></th>
-            <th onclick="sortTable(3)">Prodáno ks <em class="si"></em></th>
-            <th onclick="sortTable(4)">Cena Kč <em class="si"></em></th>
-            <th onclick="sortTable(5)">Tržba Kč <em class="si"></em></th>
-            <th onclick="sortTable(6)">Skladem <em class="si"></em></th>
-            <th onclick="sortTable(7)">Viditelný <em class="si"></em></th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-        <tfoot><tr id="tableFoot"></tr></tfoot>
-      </table>
-    </div>
-  </div>
+<main class="main">
+<h1>Prodej akčních balíčků</h1>
+<p class="sub">Sestava k 06.04.2026 · 129 balíčků · Zdroj: WPJ Shop</p>
+<div class="kpis">
+<div class="kpi"><div class="kpi-l">Celkem prodáno</div><div class="kpi-v">1,733 ks</div><div class="kpi-n">129 různých balíčků</div></div>
+<div class="kpi g"><div class="kpi-l">TOP balíček</div><div class="kpi-v">52902/03</div><div class="kpi-n">603 ks — dominantní produkt</div></div>
+<div class="kpi y"><div class="kpi-l">Průměr na balíček</div><div class="kpi-v">13.4 ks</div><div class="kpi-n">Medián: 3 ks</div></div>
+<div class="kpi b"><div class="kpi-l">Balíčky s 1 prodejem</div><div class="kpi-v">48</div><div class="kpi-n">37 % sortimentu — zvážit zrušení</div></div>
 </div>
-
+<div class="sec" id="top20"><h2>🏆 TOP 20 balíčků podle prodeje</h2>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">1.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">52902/03</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:100.0%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">603 ks</div></div><span style="width:60px;text-align:right;font-weight:700">603 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">2.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">AU572</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:28.524046434494192%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">172 ks</div></div><span style="width:60px;text-align:right;font-weight:700">172 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">3.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">YH247</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:15.257048092868988%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">92 ks</div></div><span style="width:60px;text-align:right;font-weight:700">92 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">4.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">YD653</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:12.769485903814262%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">77 ks</div></div><span style="width:60px;text-align:right;font-weight:700">77 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">5.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">MF366</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:7.79436152570481%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">47 ks</div></div><span style="width:60px;text-align:right;font-weight:700">47 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">6.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">TW935</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:7.462686567164178%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">45 ks</div></div><span style="width:60px;text-align:right;font-weight:700">45 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">7.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">JH740</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:7.131011608623548%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">43 ks</div></div><span style="width:60px;text-align:right;font-weight:700">43 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">8.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">EK428</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:5.970149253731343%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">36 ks</div></div><span style="width:60px;text-align:right;font-weight:700">36 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">9.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">IC353</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:4.477611940298507%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">27 ks</div></div><span style="width:60px;text-align:right;font-weight:700">27 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">10.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">ET013</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:4.311774461028192%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">26 ks</div></div><span style="width:60px;text-align:right;font-weight:700">26 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">11.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">MY493</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:4.1459369817578775%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">25 ks</div></div><span style="width:60px;text-align:right;font-weight:700">25 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">12.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">CB008</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:4.1459369817578775%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">25 ks</div></div><span style="width:60px;text-align:right;font-weight:700">25 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">13.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">QD143</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:3.9800995024875623%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">24 ks</div></div><span style="width:60px;text-align:right;font-weight:700">24 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">14.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">AX000</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:3.6484245439469323%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">22 ks</div></div><span style="width:60px;text-align:right;font-weight:700">22 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">15.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">YG940</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:3.482587064676617%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">21 ks</div></div><span style="width:60px;text-align:right;font-weight:700">21 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">16.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">GD574</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:2.9850746268656714%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">18 ks</div></div><span style="width:60px;text-align:right;font-weight:700">18 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">17.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">PG066</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:2.9850746268656714%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">18 ks</div></div><span style="width:60px;text-align:right;font-weight:700">18 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">18.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">DB290</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:2.8192371475953566%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">17 ks</div></div><span style="width:60px;text-align:right;font-weight:700">17 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">19.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">OH532</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:2.6533996683250414%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">16 ks</div></div><span style="width:60px;text-align:right;font-weight:700">16 ks</span></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:13px"><span style="width:28px;text-align:right;font-weight:700;color:#64748B">20.</span><span style="width:80px;font-family:monospace;font-size:12px;color:#64748B">PO056</span><div style="flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="height:100%;width:2.4875621890547266%;background:linear-gradient(90deg,var(--brand),#B87AA8);border-radius:6px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-weight:600;min-width:30px">15 ks</div></div><span style="width:60px;text-align:right;font-weight:700">15 ks</span></div>
+</div>
+<div class="sec" id="tabulka"><h2>📋 Kompletní přehled</h2>
+<div class="filters">
+<input type="text" id="s" placeholder="Hledat kód..." oninput="ft()">
+<button class="on" onclick="fc('all',this)">Vše (129)</button>
+<button onclick="fc('top',this)">TOP 10+ ks</button>
+<button onclick="fc('mid',this)">2-9 ks</button>
+<button onclick="fc('low',this)">1 ks (48)</button>
+</div>
+<div style="overflow-x:auto">
+<table id="t"><thead><tr>
+<th onclick="st(0)">#</th><th onclick="st(1)">Kód</th><th onclick="st(2)" style="text-align:right">Prodáno ks ↕</th><th>Kategorie</th>
+</tr></thead><tbody><tr data-cat="top"><td>1</td><td style="font-family:monospace;font-size:12px">52902/03</td><td style="text-align:right"><strong>603</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>2</td><td style="font-family:monospace;font-size:12px">AU572</td><td style="text-align:right"><strong>172</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>3</td><td style="font-family:monospace;font-size:12px">YH247</td><td style="text-align:right"><strong>92</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>4</td><td style="font-family:monospace;font-size:12px">YD653</td><td style="text-align:right"><strong>77</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>5</td><td style="font-family:monospace;font-size:12px">MF366</td><td style="text-align:right"><strong>47</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>6</td><td style="font-family:monospace;font-size:12px">TW935</td><td style="text-align:right"><strong>45</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>7</td><td style="font-family:monospace;font-size:12px">JH740</td><td style="text-align:right"><strong>43</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>8</td><td style="font-family:monospace;font-size:12px">EK428</td><td style="text-align:right"><strong>36</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>9</td><td style="font-family:monospace;font-size:12px">IC353</td><td style="text-align:right"><strong>27</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>10</td><td style="font-family:monospace;font-size:12px">ET013</td><td style="text-align:right"><strong>26</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>11</td><td style="font-family:monospace;font-size:12px">MY493</td><td style="text-align:right"><strong>25</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>12</td><td style="font-family:monospace;font-size:12px">CB008</td><td style="text-align:right"><strong>25</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>13</td><td style="font-family:monospace;font-size:12px">QD143</td><td style="text-align:right"><strong>24</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>14</td><td style="font-family:monospace;font-size:12px">AX000</td><td style="text-align:right"><strong>22</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>15</td><td style="font-family:monospace;font-size:12px">YG940</td><td style="text-align:right"><strong>21</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>16</td><td style="font-family:monospace;font-size:12px">GD574</td><td style="text-align:right"><strong>18</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>17</td><td style="font-family:monospace;font-size:12px">PG066</td><td style="text-align:right"><strong>18</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>18</td><td style="font-family:monospace;font-size:12px">DB290</td><td style="text-align:right"><strong>17</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>19</td><td style="font-family:monospace;font-size:12px">OH532</td><td style="text-align:right"><strong>16</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>20</td><td style="font-family:monospace;font-size:12px">PO056</td><td style="text-align:right"><strong>15</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>21</td><td style="font-family:monospace;font-size:12px">MF192</td><td style="text-align:right"><strong>14</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>22</td><td style="font-family:monospace;font-size:12px">PR437</td><td style="text-align:right"><strong>14</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>23</td><td style="font-family:monospace;font-size:12px">PX373</td><td style="text-align:right"><strong>12</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>24</td><td style="font-family:monospace;font-size:12px">LV585</td><td style="text-align:right"><strong>12</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>25</td><td style="font-family:monospace;font-size:12px">WX598</td><td style="text-align:right"><strong>12</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>26</td><td style="font-family:monospace;font-size:12px">IU320</td><td style="text-align:right"><strong>11</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>27</td><td style="font-family:monospace;font-size:12px">ST750</td><td style="text-align:right"><strong>11</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>28</td><td style="font-family:monospace;font-size:12px">BC869</td><td style="text-align:right"><strong>11</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="top"><td>29</td><td style="font-family:monospace;font-size:12px">PN436</td><td style="text-align:right"><strong>10</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#FEF3C7;color:#92400E">TOP</span></td></tr>
+<tr data-cat="mid"><td>30</td><td style="font-family:monospace;font-size:12px">EE147</td><td style="text-align:right"><strong>9</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>31</td><td style="font-family:monospace;font-size:12px">DP361</td><td style="text-align:right"><strong>9</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>32</td><td style="font-family:monospace;font-size:12px">NR649</td><td style="text-align:right"><strong>8</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>33</td><td style="font-family:monospace;font-size:12px">CY150</td><td style="text-align:right"><strong>8</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>34</td><td style="font-family:monospace;font-size:12px">NQ771</td><td style="text-align:right"><strong>8</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>35</td><td style="font-family:monospace;font-size:12px">OG279</td><td style="text-align:right"><strong>8</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>36</td><td style="font-family:monospace;font-size:12px">6653</td><td style="text-align:right"><strong>7</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>37</td><td style="font-family:monospace;font-size:12px">TI076</td><td style="text-align:right"><strong>7</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>38</td><td style="font-family:monospace;font-size:12px">MZ984</td><td style="text-align:right"><strong>6</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>39</td><td style="font-family:monospace;font-size:12px">EC212</td><td style="text-align:right"><strong>6</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>40</td><td style="font-family:monospace;font-size:12px">IC931</td><td style="text-align:right"><strong>6</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>41</td><td style="font-family:monospace;font-size:12px">GD409</td><td style="text-align:right"><strong>6</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>42</td><td style="font-family:monospace;font-size:12px">QF894</td><td style="text-align:right"><strong>6</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>43</td><td style="font-family:monospace;font-size:12px">EE878</td><td style="text-align:right"><strong>6</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>44</td><td style="font-family:monospace;font-size:12px">RI073</td><td style="text-align:right"><strong>5</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>45</td><td style="font-family:monospace;font-size:12px">TR433</td><td style="text-align:right"><strong>5</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>46</td><td style="font-family:monospace;font-size:12px">MU915</td><td style="text-align:right"><strong>5</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>47</td><td style="font-family:monospace;font-size:12px">US098</td><td style="text-align:right"><strong>5</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>48</td><td style="font-family:monospace;font-size:12px">6663</td><td style="text-align:right"><strong>4</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>49</td><td style="font-family:monospace;font-size:12px">YZ776</td><td style="text-align:right"><strong>4</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>50</td><td style="font-family:monospace;font-size:12px">BC270</td><td style="text-align:right"><strong>4</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>51</td><td style="font-family:monospace;font-size:12px">VA991</td><td style="text-align:right"><strong>4</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>52</td><td style="font-family:monospace;font-size:12px">6660</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>53</td><td style="font-family:monospace;font-size:12px">CG170</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>54</td><td style="font-family:monospace;font-size:12px">LE742</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>55</td><td style="font-family:monospace;font-size:12px">TV731</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>56</td><td style="font-family:monospace;font-size:12px">FE820</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>57</td><td style="font-family:monospace;font-size:12px">GR738</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>58</td><td style="font-family:monospace;font-size:12px">XE173</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>59</td><td style="font-family:monospace;font-size:12px">BG076</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>60</td><td style="font-family:monospace;font-size:12px">OO908</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>61</td><td style="font-family:monospace;font-size:12px">ER826</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>62</td><td style="font-family:monospace;font-size:12px">IH618</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>63</td><td style="font-family:monospace;font-size:12px">TH171</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>64</td><td style="font-family:monospace;font-size:12px">KK951</td><td style="text-align:right"><strong>3</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>65</td><td style="font-family:monospace;font-size:12px">FC361</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>66</td><td style="font-family:monospace;font-size:12px">CR455</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>67</td><td style="font-family:monospace;font-size:12px">TV498</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>68</td><td style="font-family:monospace;font-size:12px">EK360</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>69</td><td style="font-family:monospace;font-size:12px">HS846</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>70</td><td style="font-family:monospace;font-size:12px">GL059</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>71</td><td style="font-family:monospace;font-size:12px">BP850</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>72</td><td style="font-family:monospace;font-size:12px">TM460</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>73</td><td style="font-family:monospace;font-size:12px">OB737</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>74</td><td style="font-family:monospace;font-size:12px">SP045</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>75</td><td style="font-family:monospace;font-size:12px">YE428</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>76</td><td style="font-family:monospace;font-size:12px">ER058</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>77</td><td style="font-family:monospace;font-size:12px">SX237</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>78</td><td style="font-family:monospace;font-size:12px">CV648</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>79</td><td style="font-family:monospace;font-size:12px">EO350</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>80</td><td style="font-family:monospace;font-size:12px">RR717</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="mid"><td>81</td><td style="font-family:monospace;font-size:12px">BT835</td><td style="text-align:right"><strong>2</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#DBEAFE;color:#1E40AF">Střed</span></td></tr>
+<tr data-cat="low"><td>82</td><td style="font-family:monospace;font-size:12px">AG295</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>83</td><td style="font-family:monospace;font-size:12px">GQ088</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>84</td><td style="font-family:monospace;font-size:12px">XT790</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>85</td><td style="font-family:monospace;font-size:12px">ZC831</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>86</td><td style="font-family:monospace;font-size:12px">YT328</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>87</td><td style="font-family:monospace;font-size:12px">EF658</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>88</td><td style="font-family:monospace;font-size:12px">EA248</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>89</td><td style="font-family:monospace;font-size:12px">RS525</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>90</td><td style="font-family:monospace;font-size:12px">CJ659</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>91</td><td style="font-family:monospace;font-size:12px">GR258</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>92</td><td style="font-family:monospace;font-size:12px">PO402</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>93</td><td style="font-family:monospace;font-size:12px">PH201</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>94</td><td style="font-family:monospace;font-size:12px">HU988</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>95</td><td style="font-family:monospace;font-size:12px">AX239</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>96</td><td style="font-family:monospace;font-size:12px">YJ580</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>97</td><td style="font-family:monospace;font-size:12px">GG167</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>98</td><td style="font-family:monospace;font-size:12px">UE568</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>99</td><td style="font-family:monospace;font-size:12px">II461</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>100</td><td style="font-family:monospace;font-size:12px">UO321</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>101</td><td style="font-family:monospace;font-size:12px">XW035</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>102</td><td style="font-family:monospace;font-size:12px">SG886</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>103</td><td style="font-family:monospace;font-size:12px">WQ104</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>104</td><td style="font-family:monospace;font-size:12px">AE596</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>105</td><td style="font-family:monospace;font-size:12px">OS391</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>106</td><td style="font-family:monospace;font-size:12px">DO281</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>107</td><td style="font-family:monospace;font-size:12px">HC430</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>108</td><td style="font-family:monospace;font-size:12px">ZU217</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>109</td><td style="font-family:monospace;font-size:12px">HD366</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>110</td><td style="font-family:monospace;font-size:12px">ZG095</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>111</td><td style="font-family:monospace;font-size:12px">WX271</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>112</td><td style="font-family:monospace;font-size:12px">UW896</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>113</td><td style="font-family:monospace;font-size:12px">LL302</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>114</td><td style="font-family:monospace;font-size:12px">AH767</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>115</td><td style="font-family:monospace;font-size:12px">SC473</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>116</td><td style="font-family:monospace;font-size:12px">JM413</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>117</td><td style="font-family:monospace;font-size:12px">WG327</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>118</td><td style="font-family:monospace;font-size:12px">BE906</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>119</td><td style="font-family:monospace;font-size:12px">UH183</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>120</td><td style="font-family:monospace;font-size:12px">BC836</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>121</td><td style="font-family:monospace;font-size:12px">CR502</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>122</td><td style="font-family:monospace;font-size:12px">AT336</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>123</td><td style="font-family:monospace;font-size:12px">XJ241</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>124</td><td style="font-family:monospace;font-size:12px">QZ359</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>125</td><td style="font-family:monospace;font-size:12px">LI434</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>126</td><td style="font-family:monospace;font-size:12px">BB576</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>127</td><td style="font-family:monospace;font-size:12px">KR936</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>128</td><td style="font-family:monospace;font-size:12px">KC171</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+<tr data-cat="low"><td>129</td><td style="font-family:monospace;font-size:12px">QR071</td><td style="text-align:right"><strong>1</strong></td><td><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--bg);color:var(--sub)">Nízký</span></td></tr>
+</tbody></table></div>
+<div class="pages" id="pg"></div>
+</div></main>
+<button class="dm" onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'':'dark'">🌙</button>
 <script>
-const DATA = [
-  {r:1,c:"52902/03",t:"Revitalizační maska na obličej a krk Lingzhi - 3ks",q:603,p:261,rev:157383,s:202,v:true},
-  {r:2,c:"AU572",t:"Revitalizační maska na obličej a krk s fullereny – výhodný balíček dvou masek",q:172,p:88,rev:15136,s:2008,v:true},
-  {r:3,c:"YH247",t:"Kolagenová terapie pro zpevnění a hydrataci pleti",q:92,p:1039,rev:95588,s:423,v:true},
-  {r:4,c:"YD653",t:"Regenerační balíček pro silné vlasy s deodorantem",q:77,p:561,rev:43197,s:601,v:true},
-  {r:5,c:"MF366",t:"Omlazující rituál pro dokonalé kontury obličeje",q:47,p:487,rev:22889,s:89,v:true},
-  {r:6,c:"TW935",t:"Kompletní péče o ruce a nohy s hadím olejem",q:45,p:162,rev:7290,s:2764,v:true},
-  {r:7,c:"JH740",t:"Mořský kolagenový rituál pro vypnutou a zářivou pleť",q:43,p:343,rev:14749,s:450,v:true},
-  {r:8,c:"EK428",t:"Balíček intimního zdraví a přirozené pohody",q:36,p:582,rev:20952,s:640,v:true},
-  {r:9,c:"IC353",t:"Přírodní péče o intimní zdraví ženy",q:27,p:639,rev:17253,s:640,v:true},
-  {r:10,c:"ET013",t:"Kompletní kolagenová péče pro mladistvé kontury",q:26,p:1039,rev:27014,s:423,v:true},
-  {r:11,c:"MY493",t:"Zázvor – přírodní podpora pro celkovou pohodu",q:25,p:121,rev:3025,s:247,v:true},
-  {r:12,c:"CB008",t:"Kompletní hydratační péče pro zářivou pleť",q:25,p:798,rev:19950,s:105,v:true},
-  {r:13,c:"QD143",t:"Hydratační rituál pro tělo a vlasy Oliva a Marakuja",q:24,p:726,rev:17424,s:205,v:true},
-  {r:14,c:"AX000",t:"Podpora pohodlí svalů a kloubů",q:22,p:497,rev:10934,s:715,v:true},
-  {r:15,c:"YG940",t:"Aromatický rituál svěžesti",q:21,p:731,rev:15351,s:161,v:false},
-  {r:16,c:"GD574",t:"Regenerační SPA balíček pro dokonalé ruce a nohy",q:18,p:162,rev:2916,s:2806,v:true},
-  {r:17,c:"PG066",t:"Broskvový rituál pro zářivou pleť",q:18,p:228,rev:4104,s:1169,v:true},
-  {r:18,c:"DB290",t:"Přírodní rovnováha pro aktivní ženu – rozchodnice, bylinné vložky a fytonáplast tianDe",q:17,p:1027,rev:17459,s:2469,v:false},
-  {r:19,c:"OH532",t:"Exfoliovaná a přirozeně zářivá pleť tianDe",q:16,p:686,rev:10976,s:80,v:true},
-  {r:20,c:"PO056",t:"Zářivá a vyhlazená pleť s dárkem",q:15,p:686,rev:10290,s:136,v:true},
-  {r:21,c:"MF192",t:"Balíček Úleva a regenerace",q:14,p:352,rev:4928,s:738,v:true},
-  {r:22,c:"PR437",t:"Hydratační rituál Vodní meloun a Hrozny s dárkem",q:14,p:726,rev:10164,s:214,v:true},
-  {r:23,c:"PX373",t:"Základní balíček k hubnutí TOP produkty",q:12,p:3457,rev:41484,s:142,v:true},
-  {r:24,c:"LV585",t:"Přírodní péče pro tělo i duši",q:12,p:1342,rev:16104,s:339,v:false},
-  {r:25,c:"WX598",t:"Zářivá pokožka, kterou si zamilujete",q:12,p:1342,rev:16104,s:365,v:false},
-  {r:26,c:"ST750",t:"Čistící náplast na nos černé tečky - v akci 3+1",q:11,p:115,rev:1265,s:99,v:true},
-  {r:27,c:"IU320",t:"Bylinný balíček pro vitální imunitu a uvolněné tělo",q:11,p:828,rev:9108,s:245,v:false},
-  {r:28,c:"BC869",t:"Collagen Active – komplexní lifting pro obličej, krk i vaše tělo",q:11,p:2804,rev:30844,s:135,v:true},
-  {r:29,c:"PN436",t:"Fytokorekce problematické pleti",q:10,p:380,rev:3800,s:182,v:true},
-  {r:30,c:"EE147",t:"Úleva a regenerace",q:9,p:737,rev:6633,s:738,v:true},
-  {r:31,c:"DP361",t:"Balíček pro podporu pohyblivosti",q:9,p:1302,rev:11718,s:613,v:true},
-  {r:32,c:"CY150",t:"Kompletní BIO REHAB balíček pro probuzení a posílení vlasů",q:8,p:1341,rev:10728,s:200,v:true},
-  {r:33,c:"NR649",t:"Osvěžující trio pro dokonale čistou pleť",q:8,p:520,rev:4160,s:285,v:true},
-  {r:34,c:"NQ771",t:"Proměna postavy - intenzivní program pro vaše tělo",q:8,p:6813,rev:54504,s:142,v:true},
-  {r:35,c:"OG279",t:"Trio omlazujících masek pro zářivou a vypnutou pleť",q:8,p:571,rev:4568,s:202,v:false},
-  {r:36,c:"6653",t:"Bio Rehab - aktivátor růstu",q:7,p:0,rev:0,s:0,v:false},
-  {r:37,c:"TI076",t:"Rozpustný čakankový nápoj s extraktmi parchy saflorovej a rezavce šikmého 1+1",q:7,p:61,rev:427,s:992,v:false},
-  {r:38,c:"MZ984",t:"Luxusní péče pro hedvábně jemné ruce",q:6,p:177,rev:1062,s:1979,v:false},
-  {r:39,c:"EC212",t:"Péče o pohodlí při pohybu",q:6,p:1236,rev:7416,s:1304,v:true},
-  {r:40,c:"GD409",t:"Kolagenový omlazující rituál pro zralou pleť",q:6,p:1458,rev:8748,s:117,v:true},
-  {r:41,c:"IC931",t:"Rozproudění lymfy",q:6,p:3690,rev:22140,s:18,v:true},
-  {r:42,c:"QF894",t:"Přírodní obnova pleti s tianDe",q:6,p:520,rev:3120,s:285,v:true},
-  {r:43,c:"EE878",t:"Bylinná péče pro tělo v pohybu i klidu",q:6,p:828,rev:4968,s:245,v:false},
-  {r:44,c:"RI073",t:"Intimní péče – balíček od Království tianDe",q:5,p:704,rev:3520,s:1205,v:true},
-  {r:45,c:"TR433",t:"STOP nepohodlí zad a kloubů",q:5,p:618,rev:3090,s:1304,v:true},
-  {r:46,c:"MU915",t:"Bylinná péče zevnitř i zvenčí",q:5,p:1341,rev:6705,s:1064,v:false},
-  {r:47,c:"US098",t:"Komplexní péče o oční okolí",q:5,p:542,rev:2710,s:680,v:false},
-  {r:48,c:"6663",t:"Šampon pro hloubkové čistění a kondicionér",q:4,p:0,rev:0,s:0,v:false},
-  {r:49,c:"YZ776",t:"Základní menstruační balíček - Nefritový start",q:4,p:537,rev:2148,s:885,v:true},
-  {r:50,c:"BC270",t:"Dokonalý úklidový set pro zářivou domácnost",q:4,p:599,rev:2396,s:140,v:false},
-  {r:51,c:"VA991",t:"Vlasová terapie pro husté a zářivé vlasy",q:4,p:2001,rev:8004,s:188,v:true},
-  {r:52,c:"6660",t:"Ovečková řada pro krásnou pleť",q:3,p:0,rev:0,s:0,v:false},
-  {r:53,c:"CG170",t:"Kompletní menstruační péče - Nefritová harmonie",q:3,p:929,rev:2787,s:885,v:true},
-  {r:54,c:"LE742",t:"Balíček pro pocit lehkosti - 2. měsíc",q:3,p:2265,rev:6795,s:39,v:true},
-  {r:55,c:"TV731",t:"Balíček Jemná péče – každodenní intimní komfort",q:3,p:2005,rev:6015,s:446,v:true},
-  {r:56,c:"FE820",t:"Jemná péče – balíček pro každodenní intimní komfort",q:3,p:2390,rev:7170,s:446,v:true},
-  {r:57,c:"GR738",t:"Intimní péče – balíček od Království tianDe",q:3,p:1089,rev:3267,s:1205,v:true},
-  {r:58,c:"XE173",t:"STOP suchým rukám",q:3,p:263,rev:789,s:491,v:true},
-  {r:59,c:"BG076",t:"Elixír mládí se silou peptidů",q:3,p:2822,rev:8466,s:117,v:true},
-  {r:60,c:"OO908",t:"Sada pro problematickou pleť",q:3,p:1536,rev:4608,s:67,v:true},
-  {r:61,c:"ER826",t:"Probuzení pokožky silou oliv a zeleného čaje",q:3,p:1221,rev:3663,s:65,v:true},
-  {r:62,c:"IH618",t:"Sada regeneračních tělových solí",q:3,p:1452,rev:4356,s:207,v:true},
-  {r:63,c:"KK951",t:"Kompletní rituál čisté pleti",q:3,p:520,rev:1560,s:285,v:true},
-  {r:64,c:"TH171",t:"Kompletní rituál pro zářivou pleť",q:3,p:520,rev:1560,s:285,v:true},
-  {r:65,c:"FC361",t:"Liftingová péče",q:2,p:951,rev:1902,s:135,v:true},
-  {r:66,c:"CR455",t:"STOP předčasnému šedivění",q:2,p:1244,rev:2488,s:89,v:true},
-  {r:67,c:"TV498",t:"Svěžest a pohodlí",q:2,p:1119,rev:2238,s:1205,v:true},
-  {r:68,c:"EK360",t:"Balíček Energie života – každodenní intimní péče",q:2,p:2005,rev:4010,s:238,v:true},
-  {r:69,c:"HS846",t:"Prémiová kolagenová kúra pro obnovu pleti",q:2,p:2448,rev:4896,s:117,v:true},
-  {r:70,c:"GL059",t:"Čistá pleť začíná tady",q:2,p:1116,rev:2232,s:122,v:true},
-  {r:71,c:"BP850",t:"STOP pocení a zápachu",q:2,p:828,rev:1656,s:311,v:true},
-  {r:72,c:"TM460",t:"Knihy tianDe: Kompletní návod k úspěšnému podnikání",q:2,p:276,rev:552,s:328,v:true},
-  {r:73,c:"OB737",t:"Balíček pro hebké nohy i ruce",q:2,p:190,rev:380,s:1555,v:false},
-  {r:74,c:"SP045",t:"Kolagenová bomba pro každou příležitost",q:2,p:2135,rev:4270,s:130,v:true},
-  {r:75,c:"YE428",t:"Profesionální péče o zuby a dásně s kartáčkem zdarma",q:2,p:684,rev:1368,s:156,v:false},
-  {r:76,c:"ER058",t:"Krémová banánová polévka se zeleninou - dvojité potěšení",q:2,p:85,rev:170,s:0,v:false},
-  {r:77,c:"SX237",t:"Domácí wellness sada s tělovou solí",q:2,p:1646,rev:3292,s:207,v:true},
-  {r:78,c:"CV648",t:"Přírodní obnova pleti v třech krocích",q:2,p:520,rev:1040,s:285,v:true},
-  {r:79,c:"EO350",t:"Přírodní harmonie v čase menopauzy",q:2,p:2756,rev:5512,s:238,v:false},
-  {r:80,c:"RR717",t:"Bylinná harmonie pro klidnou menopauzu",q:2,p:3180,rev:6360,s:9,v:false},
-  {r:81,c:"BT835",t:"Revitalizace citlivé oblasti očí",q:2,p:808,rev:1616,s:16,v:false},
-  {r:82,c:"AG295",t:"Balíček pro zralou ženu 50+ Nefritová svěžest",q:1,p:1184,rev:1184,s:0,v:false},
-  {r:83,c:"GQ088",t:"Očista pro celé tělo",q:1,p:2179,rev:2179,s:143,v:false},
-  {r:84,c:"XT790",t:"Suché a poškozené vlasy",q:1,p:1283,rev:1283,s:50,v:false},
-  {r:85,c:"ZC831",t:"Lupy a svědící pokožka",q:1,p:1301,rev:1301,s:106,v:true},
-  {r:86,c:"YT328",t:"Balíček pro zdravé vlasy",q:1,p:1347,rev:1347,s:121,v:true},
-  {r:87,c:"EF658",t:"Balíček pro pocit lehkosti – 3. měsíc",q:1,p:2860,rev:2860,s:339,v:true},
-  {r:88,c:"EA248",t:"20-denní detoxikace",q:1,p:4279,rev:4279,s:1,v:false},
-  {r:89,c:"RS525",t:"Pro slečny",q:1,p:725,rev:725,s:583,v:true},
-  {r:90,c:"CJ659",t:"Balíček Menstruace s lehkostí",q:1,p:764,rev:764,s:885,v:true},
-  {r:91,c:"GR258",t:"Balíček Svěžest a pohodlí",q:1,p:734,rev:734,s:1205,v:true},
-  {r:92,c:"PO402",t:"Balíček Harmonizace cyklu",q:1,p:858,rev:858,s:609,v:true},
-  {r:93,c:"PH201",t:"Balíček Úleva přírodní cestou od Království tianDe",q:1,p:951,rev:951,s:885,v:true},
-  {r:94,c:"HU988",t:"Balíček Energie bylin",q:1,p:1315,rev:1315,s:446,v:true},
-  {r:95,c:"AX239",t:"Balíček Křehká intimita",q:1,p:558,rev:558,s:1205,v:true},
-  {r:96,c:"YJ580",t:"Těhotenství v pohodlí",q:1,p:725,rev:725,s:583,v:true},
-  {r:97,c:"GG167",t:"Balíček komfort",q:1,p:1856,rev:1856,s:1122,v:true},
-  {r:98,c:"UE568",t:"Přírodní záchrana pro unavené vlasy",q:1,p:1442,rev:1442,s:106,v:true},
-  {r:99,c:"II461",t:"Mořská síla omlazení s Fucoidanem",q:1,p:2517,rev:2517,s:165,v:true},
-  {r:100,c:"UO321",t:"Přírodní záchrana pro aknózní pleť s Master Herb",q:1,p:2174,rev:2174,s:105,v:true},
-  {r:101,c:"XW035",t:"Kompletní sada proti šedivění Master Herb",q:1,p:1395,rev:1395,s:89,v:true},
-  {r:102,c:"SG886",t:"Regenerační rituál s ovčí placentou",q:1,p:1285,rev:1285,s:150,v:true},
-  {r:103,c:"WQ104",t:"Letní balíček ženského zdraví",q:1,p:946,rev:946,s:0,v:false},
-  {r:104,c:"AE596",t:"Detoxikační balíček pro nohy s bylinným bonusem",q:1,p:2356,rev:2356,s:1656,v:false},
-  {r:105,c:"OS391",t:"STOP pigmentovým skvrnám",q:1,p:695,rev:695,s:125,v:true},
-  {r:106,c:"DO281",t:"STOP vráskám",q:1,p:1631,rev:1631,s:130,v:true},
-  {r:107,c:"HC430",t:"STOP mastné pleti",q:1,p:1395,rev:1395,s:165,v:true},
-  {r:108,c:"ZU217",t:"STOP suché pleti",q:1,p:856,rev:856,s:256,v:true},
-  {r:109,c:"HD366",t:"STOP oteklým a unaveným nohám",q:1,p:1062,rev:1062,s:207,v:true},
-  {r:110,c:"ZG095",t:"Balíček Aktivní pohyb",q:1,p:435,rev:435,s:1304,v:false},
-  {r:111,c:"WX271",t:"Baťova moudrost pro dva",q:1,p:409,rev:409,s:107,v:true},
-  {r:112,c:"UW896",t:"Oční gel na vrásky z hadího tuku 1+1",q:1,p:347,rev:347,s:410,v:false},
-  {r:113,c:"LL302",t:"Kompletní antioxidační očista a regenerace",q:1,p:507,rev:507,s:0,v:false},
-  {r:114,c:"AH767",t:"Kompletní omlazující péče o oční okolí s hyaluronovým bonusem",q:1,p:686,rev:686,s:288,v:false},
-  {r:115,c:"SC473",t:"Trio pleťových masek pro dokonalou hydrataci a omlazení",q:1,p:175,rev:175,s:890,v:false},
-  {r:116,c:"JM413",t:"Sada pro dokonale zdravou pleť bez nedokonalostí",q:1,p:1417,rev:1417,s:38,v:true},
-  {r:117,c:"WG327",t:'Balíček "Znovuzrození vlasů"',q:1,p:1141,rev:1141,s:136,v:true},
-  {r:118,c:"BE906",t:"Balíček Vitalita v přechodu - přírodní síla pro hormonální pohodu",q:1,p:1519,rev:1519,s:446,v:false},
-  {r:119,c:"UH183",t:"Přírodní rituál pro zdravé vlasy",q:1,p:829,rev:829,s:80,v:false},
-  {r:120,c:"BC836",t:"Revitalizační balíček Lingzhi pro mladistvou pleť",q:1,p:262,rev:262,s:16,v:false},
-  {r:121,c:"CR502",t:"Dokonalá čistota domácnosti s aktivním kyslíkem",q:1,p:686,rev:686,s:140,v:false},
-  {r:122,c:"AT336",t:"Omlazující kolagenový set pro intenzivní lifting",q:1,p:205,rev:205,s:231,v:false},
-  {r:123,c:"XJ241",t:"Detoxikační balíček pro dokonalé křivky",q:1,p:631,rev:631,s:18,v:false},
-  {r:124,c:"QZ359",t:"Komplexní tělová péče pro dokonalé křivky",q:1,p:631,rev:631,s:18,v:false},
-  {r:125,c:"LI434",t:"Komplexní balíček Zdravé dýchání",q:1,p:1421,rev:1421,s:151,v:true},
-  {r:126,c:"BB576",t:"Balíček Síla přírody pro vaše zdraví",q:1,p:2569,rev:2569,s:161,v:false},
-  {r:127,c:"KR936",t:"Kompletní SPA péče pro krásné a hebké ruce",q:1,p:980,rev:980,s:337,v:true},
-  {r:128,c:"KC171",t:"Přírodní rovnováha pro ženu v menopauze",q:1,p:3215,rev:3215,s:329,v:false},
-  {r:129,c:"QR071",t:"Hadí duo pro hebké a lesklé vlasy",q:1,p:707,rev:707,s:136,v:false}
-];
-
-const TOTAL_QTY = 1733;
-
-function f(n){ return n.toLocaleString('cs-CZ'); }
-
-// Theme
-function toggleTheme(){
-  const d = document.documentElement;
-  const isDark = d.getAttribute('data-theme') === 'dark';
-  d.setAttribute('data-theme', isDark ? '' : 'dark');
-  localStorage.setItem('theme', isDark ? 'light' : 'dark');
-}
-(function(){ if(localStorage.getItem('theme')==='dark') document.documentElement.setAttribute('data-theme','dark'); })();
-
-// Sidebar
-function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('show');
-}
-
-// TOP 20 BAR
-(function(){
-  const top20 = DATA.slice(0,20);
-  const mx = top20[0].q;
-  document.getElementById('barChart').innerHTML = top20.map((d,i)=>{
-    const pct = (d.q/mx*100).toFixed(1);
-    const acc = i<3 ? ' accent' : '';
-    return `<div class="bar-item">
-      <div class="bar-rank">#${d.r}</div>
-      <div class="bar-label-name" title="${d.t}">${d.c} — ${d.t}</div>
-      <div class="bar-track"><div class="bar-fill${acc}" style="width:${pct}%">${d.q} ks</div></div>
-    </div>`;
-  }).join('');
-})();
-
-// DONUT
-(function(){
-  const top10q = DATA.slice(0,10).reduce((s,d)=>s+d.q,0);
-  const rest = TOTAL_QTY - top10q;
-  const colors = ['#5C2450','#7a3a6c','#9b5c8c','#b87caa','#d4a4c8','#e6a817','#f0c05a','#52b788','#2d6a4f','#1a4a2e'];
-  const segs = DATA.slice(0,10).map((d,i)=>({lbl:d.c,val:d.q,col:colors[i]}));
-  segs.push({lbl:'Ostatní (119)',val:rest,col:'#cbd5e1'});
-  const cx=100,cy=100,R=75,hole=38;
-  let a = -Math.PI/2, paths='';
-  function pt(ang,r){ return [cx+r*Math.cos(ang), cy+r*Math.sin(ang)]; }
-  segs.forEach(seg=>{
-    const da = seg.val/TOTAL_QTY*2*Math.PI;
-    const ea = a+da, la = da>Math.PI?1:0;
-    const [x1,y1]=pt(a,R),[x2,y2]=pt(ea,R),[x3,y3]=pt(ea,hole),[x4,y4]=pt(a,hole);
-    paths += `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} A${R},${R} 0 ${la},1 ${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)} A${hole},${hole} 0 ${la},0 ${x4.toFixed(1)},${y4.toFixed(1)} Z" fill="${seg.col}" stroke="var(--card)" stroke-width="1.5"/>`;
-    a = ea;
-  });
-  paths += `<text x="${cx}" y="${cy-7}" text-anchor="middle" font-size="16" font-weight="800" fill="var(--text)">${f(TOTAL_QTY)}</text>`;
-  paths += `<text x="${cx}" y="${cy+11}" text-anchor="middle" font-size="9" fill="var(--text-muted)">celkem ks</text>`;
-  document.getElementById('donutSvg').innerHTML = paths;
-  document.getElementById('donutStats').innerHTML = segs.map(s=>
-    `<div class="donut-stat"><div class="donut-stat-left"><div class="dot" style="background:${s.col}"></div>${s.lbl}</div><div class="donut-stat-right">${f(s.val)} ks</div></div>`
-  ).join('');
-})();
-
-// REVENUE CHART
-(function(){
-  const top10 = DATA.slice().sort((a,b)=>b.rev-a.rev).slice(0,10);
-  const mx = top10[0].rev;
-  document.getElementById('revChart').innerHTML = top10.map(d=>{
-    const pct = (d.rev/mx*100).toFixed(1);
-    return `<div class="bar-item">
-      <div class="bar-rank">#${d.r}</div>
-      <div class="bar-label-name" style="width:190px" title="${d.t}">${d.c}</div>
-      <div class="bar-track"><div class="bar-fill accent" style="width:${pct}%">${f(d.rev)} Kč</div></div>
-    </div>`;
-  }).join('');
-})();
-
-// TABLE
-let filtered = [...DATA], sortCol=0, sortDir=1;
-function renderTable(){
-  const mx = DATA[0].q;
-  document.getElementById('tableBody').innerHTML = filtered.map(d=>{
-    const mp = Math.round(d.q/mx*100);
-    const badge = d.v ? '<span class="badge badge-yes">Ano</span>' : '<span class="badge badge-no">Ne</span>';
-    const rc = d.r<=3?'t3':'';
-    return `<tr>
-      <td><span class="rb ${rc}">${d.r}</span></td>
-      <td style="text-align:left"><strong>${d.c}</strong></td>
-      <td class="nc">${d.t}</td>
-      <td>${d.q}<span class="mbt"><span class="mbf" style="width:${mp}%"></span></span></td>
-      <td>${d.p>0?f(d.p)+' Kč':'—'}</td>
-      <td>${d.rev>0?f(d.rev)+' Kč':'—'}</td>
-      <td>${d.s>0?f(d.s):'<span style="color:var(--danger)">0</span>'}</td>
-      <td>${badge}</td>
-    </tr>`;
-  }).join('');
-  const tq = filtered.reduce((s,d)=>s+d.q,0);
-  const tr = filtered.reduce((s,d)=>s+d.rev,0);
-  document.getElementById('tableFoot').innerHTML = `<td>Celkem (${filtered.length} balíčků)</td><td></td><td></td><td>${f(tq)} ks</td><td>—</td><td>${f(tr)} Kč</td><td>—</td><td>—</td>`;
-  document.getElementById('tableInfo').textContent = `Zobrazeno: ${filtered.length} / 129`;
-}
-function applySort(){
-  const keys=['r','c','t','q','p','rev','s','v'];
-  const k = keys[sortCol];
-  filtered.sort((a,b)=>{
-    let av=a[k],bv=b[k];
-    if(typeof av==='string') return sortDir*av.localeCompare(bv,'cs');
-    if(typeof av==='boolean') return sortDir*(Number(av)-Number(bv));
-    return sortDir*(av-bv);
-  });
-}
-function filterTable(){
-  const q = document.getElementById('searchBox').value.toLowerCase();
-  const vis = document.getElementById('visFilter').value;
-  filtered = DATA.filter(d=>{
-    const mq = !q || d.c.toLowerCase().includes(q) || d.t.toLowerCase().includes(q);
-    const mv = !vis || (vis==='ano'?d.v:!d.v);
-    return mq && mv;
-  });
-  applySort(); renderTable();
-}
-function sortTable(col){
-  if(sortCol===col){ sortDir*=-1; } else { sortCol=col; sortDir=col===0?1:-1; }
-  document.querySelectorAll('.data-table thead th').forEach((th,i)=>{
-    th.classList.remove('sa','sd');
-    if(i===sortCol) th.classList.add(sortDir===1?'sa':'sd');
-  });
-  applySort(); renderTable();
-}
-filterTable();
-
-// Scroll nav
-window.addEventListener('scroll',()=>{
-  const y = window.scrollY+120;
-  ['kpi','top20','donut','table'].forEach(id=>{
-    const el=document.getElementById(id);
-    const lk=document.querySelector(`.sidebar-nav a[href="#${id}"]`);
-    if(!el||!lk) return;
-    if(y>=el.offsetTop && y<el.offsetTop+el.offsetHeight){
-      document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
-      lk.classList.add('active');
-    }
-  });
-},{passive:true});
-</script>
-</body>
-</html>
+let cf='all',cs='';const R=[...document.querySelectorAll('#t tbody tr')];const PS=50;let cp=0;
+function af(){let v=R.filter(r=>{const c=r.dataset.cat,k=r.children[1].textContent.toLowerCase();return(cf==='all'||cf===c)&&(!cs||k.includes(cs))});R.forEach(r=>r.style.display='none');const t=v.length,p=Math.ceil(t/PS);cp=Math.min(cp,p-1);if(cp<0)cp=0;v.slice(cp*PS,cp*PS+PS).forEach(r=>r.style.display='');const pg=document.getElementById('pg');pg.innerHTML='';for(let i=0;i<p;i++){const b=document.createElement('button');b.textContent=i+1;if(i===cp)b.classList.add('on');b.onclick=()=>{cp=i;af()};pg.appendChild(b)}}
+function ft(){cs=document.getElementById('s').value.toLowerCase();cp=0;af()}
+function fc(c,b){document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('on'));b.classList.add('on');cf=c;cp=0;af()}
+let sc=-1,sa=true;function st(c){if(sc===c)sa=!sa;else{sc=c;sa=c===2?false:true}R.sort((a,b)=>{let va=a.children[c].textContent.trim(),vb=b.children[c].textContent.trim();if(c===0||c===2){va=parseInt(va)||0;vb=parseInt(vb)||0;return sa?va-vb:vb-va}return sa?va.localeCompare(vb):vb.localeCompare(va)});const tb=document.querySelector('#t tbody');R.forEach(r=>tb.appendChild(r));af()}
+af();
+</script></body></html>
