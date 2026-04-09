@@ -39,6 +39,9 @@ tr:hover td{background:rgba(92,36,80,.03)}
 .pages{display:flex;gap:6px;margin-top:12px;justify-content:center;flex-wrap:wrap}
 .pages button{width:32px;height:32px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;font-size:12px;font-family:inherit}
 .pages button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+/* Sidebar font unification */
+aside a, .sidebar-nav a, .sidebar a, nav a[href*="rkonfal.github.io"] { font-size: 13px !important; }
 </style></head><body>
 <button class="ham" onclick="document.querySelector('.sidebar').classList.toggle('open');document.querySelector('.ov').classList.toggle('open')">☰</button>
 <div class="ov" onclick="document.querySelector('.sidebar').classList.remove('open');this.classList.remove('open')"></div>
